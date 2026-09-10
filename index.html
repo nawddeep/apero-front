@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APÉRO — After Dark | Udaipur 2026</title>
+  <meta name="description" content="APÉRO — One Night. No Limits. A high-end underground music, fashion, and luxury nightlife experience in Udaipur, India on 26 SEPTEMBER 2026.">
+  <meta name="keywords" content="Apéro, underground techno, Udaipur music festival, luxury nightlife, electronic music event, fashion party">
+  
+  <!-- OpenGraph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="APÉRO — After Dark | Udaipur 2026">
+  <meta property="og:description" content="One Night. No Limits. Premium underground electronic music event in Udaipur, India.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e50914'>A</text></svg>">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Film Grain Overlay -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="ambient-glow-top" aria-hidden="true"></div>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" role="progressbar" aria-label="Loading Apéro experience">
+    <div class="preloader-header">
+      <span>INITIATING PROTOCOL</span>
+      <span>UDAIPUR // 2026</span>
+    </div>
+    <div class="preloader-center">
+      <div class="preloader-logo" id="preloaderLogo">APÉRO</div>
+      <div class="preloader-tagline">AFTER DARK // UNDERGROUND</div>
+    </div>
+    <div class="preloader-footer">
+      <div class="preloader-bar-wrap">
+        <div class="preloader-bar" id="preloaderBar"></div>
+      </div>
+      <div class="preloader-counter" id="preloaderCounter">00%</div>
+    </div>
+  </div>
+
+  <!-- Primary Navigation -->
+  <header id="mainNav">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo" aria-label="Apéro Home">
+        <span class="nav-logo-text">APÉRO</span>
+        <span class="nav-coords">24°35'N 73°41'E</span>
+      </a>
+
+      <div class="nav-actions">
+        <button class="sound-toggle" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="false" title="Toggle Sound">
+          <span class="sound-bars" aria-hidden="true">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </span>
+          <span class="sound-text" id="soundText">SOUND OFF</span>
+        </button>
+        <a href="#footer" class="nav-link nav-contact-link">CONTACT</a>
+        <button class="btn btn-primary btn-sm open-booking-btn" data-tier="general" aria-label="Book Tickets">BOOK TICKET</button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Mobile Navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobileDrawer" aria-hidden="true">
+    <ul class="mobile-nav-list">
+      <li><a href="#footer" class="mobile-nav-link">CONTACT</a></li>
+    </ul>
+    <div class="mobile-drawer-footer">
+      <p>26 SEPTEMBER 2026 — UDAIPUR, INDIA</p>
+      <button class="btn btn-primary btn-lg open-booking-btn" data-tier="general" style="margin-top: 1.5rem;">BOOK TICKET</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- ==========================================================================
+         HERO SECTION
+         ========================================================================== -->
+    <section id="hero" aria-label="Hero Introduction">
+      <div class="hero-video-wrapper">
+        <video 
+          class="hero-video" 
+          id="heroVideo"
+          src="assets/videos/1.mp4"
+          autoplay 
+          muted 
+          loop 
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="assets/videos/1.mp4" type="video/mp4">
+          <source src="1.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+        <div class="hero-overlay-dark"></div>
+        <div class="hero-overlay-red"></div>
+        <div class="hero-overlay-vignette"></div>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="display-title hero-title hero-anim-elem">
+          APÉRO
+          <span class="title-accent">AFTER DARK</span>
+        </h1>
+
+        <p class="hero-tagline hero-anim-elem">ONE NIGHT. NO LIMITS.</p>
+
+        <div class="hero-meta hero-anim-elem">
+          <div class="hero-meta-item">
+            <span>26 SEPTEMBER 2026</span>
+          </div>
+          <span class="hero-meta-dot">/</span>
+          <div class="hero-meta-item">
+            <span>UDAIPUR, INDIA</span>
+          </div>
+          <span class="hero-meta-dot">/</span>
+          <div class="hero-meta-item">
+            <span>21:00 — 06:00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         ABOUT / EXPERIENCE STATEMENT SECTION
+         ========================================================================== -->
+    <section id="about" aria-label="About the Experience">
+      <div class="site-container">
+        <div class="statement-wrap">
+          <div class="section-label">01 / PHILOSOPHY</div>
+          
+          <h2 class="statement-headline" id="statementHeadline">
+            <span class="reveal-word">THIS</span>
+            <span class="reveal-word">IS</span>
+            <span class="reveal-word accent">MORE</span>
+            <span class="reveal-word">THAN</span>
+            <span class="reveal-word">A</span>
+            <span class="reveal-word accent">PARTY.</span>
+            <span class="reveal-word">IT</span>
+            <span class="reveal-word">IS</span>
+            <span class="reveal-word">AN</span>
+            <span class="reveal-word accent">OBSIDIAN</span>
+            <span class="reveal-word">SANCTUARY</span>
+            <span class="reveal-word">OF</span>
+            <span class="reveal-word">SOUND,</span>
+            <span class="reveal-word accent">SHADOW,</span>
+            <span class="reveal-word">AND</span>
+            <span class="reveal-word">UNBRIDLED</span>
+            <span class="reveal-word accent">EXPRESSION.</span>
+          </h2>
+
+          <p class="statement-sub">
+            Conceived at the intersection of avant-garde electronic music and high-fashion nocturnal culture, Apéro transforms the heritage architecture of Udaipur into an unyielding monolithic rave. Curated strictly for those who find solace after dark.
+          </p>
+        </div>
+
+        <!-- 4 Pillars of Experience -->
+        <div class="experience-grid">
+          <div class="experience-card">
+            <div class="exp-num">01</div>
+            <div>
+              <h3 class="exp-title">SONIC ARCHITECTURE</h3>
+              <p class="exp-desc">Custom-engineered Funktion-One acoustics calibrated specifically for sub-bass physical resonance and pristine highs.</p>
+            </div>
+          </div>
+
+          <div class="experience-card">
+            <div class="exp-num">02</div>
+            <div>
+              <h3 class="exp-title">HYPER LIGHT</h3>
+              <p class="exp-desc">Brutalist crimson laser arrays, volumetric stage haze, and kinetic strobe sculptures that warp spatial perception.</p>
+            </div>
+          </div>
+
+          <div class="experience-card">
+            <div class="exp-num">03</div>
+            <div>
+              <h3 class="exp-title">RAW ENERGY</h3>
+              <p class="exp-desc">Nine continuous hours of relentless tempo from 135 to 148 BPM. No VIP velvet rope segregation on the dancefloor.</p>
+            </div>
+          </div>
+
+          <div class="experience-card">
+            <div class="exp-num">04</div>
+            <div>
+              <h3 class="exp-title">THE COMMUNION</h3>
+              <p class="exp-desc">A carefully vetted gathering of 1,800 like-minded aesthetes, clubbers, and international artists under one night sky.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         LIVE COUNTDOWN SECTION
+         ========================================================================== -->
+    <section id="countdown" aria-label="Event Countdown">
+      <div class="site-container countdown-wrapper">
+        <div class="countdown-telemetry">
+          <span>EVENT: 26 SEPTEMBER 2026</span>
+          <span>•</span>
+          <span class="active-node">SYSTEM: ONLINE</span>
+          <span>•</span>
+          <span>CAPACITY: 1,800 TICKETS</span>
+        </div>
+
+        <div class="countdown-digits-grid">
+          <div class="countdown-box">
+            <div class="countdown-number" id="cdDays">000</div>
+            <div class="countdown-label">DAYS</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="cdHours">00</div>
+            <div class="countdown-label">HOURS</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="cdMins">00</div>
+            <div class="countdown-label">MINUTES</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-number" id="cdSecs">00</div>
+            <div class="countdown-label">SECONDS</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         ARTISTS / LINEUP SECTION
+         ========================================================================== -->
+    <section id="artists" aria-label="DJ Lineup">
+      <div class="site-container">
+        <div class="artists-header">
+          <div>
+            <div class="section-label">02 / CURATION</div>
+            <h2 class="display-title" style="font-size: clamp(2.8rem, 6vw, 5rem);">ARTISTS</h2>
+          </div>
+          <p style="font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.2em; color: var(--gray); text-transform: uppercase;">
+            HEADLINERS &amp; SOUND DESIGNERS
+          </p>
+        </div>
+
+        <div class="artists-announcement">
+          <div class="announcement-content">
+            <h3 class="announcement-title">DJ LINEUP</h3>
+            <p class="announcement-subtitle">WILL BE ANNOUNCED SOON</p>
+            <p class="announcement-tagline">Stay tuned.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         VENUE SECTION
+         ========================================================================== -->
+    <section id="venue" aria-label="Venue and Location">
+      <div class="site-container">
+        <div class="venue-grid">
+          <div class="venue-visual">
+            <img src="assets/images/vanue/gallery /venue1.jpeg" alt="ROAR Udaipur venue" class="venue-image">
+            <div class="venue-overlay-gradient"></div>
+            <div class="venue-badge-pill">
+              <span style="color: var(--red);">■</span> ROAR, UDAIPUR
+            </div>
+          </div>
+
+          <div class="venue-details">
+            <div class="section-label">03 / MONOLITH</div>
+            <h2 class="venue-title">ROAR</h2>
+            <p class="venue-description">
+              UDAIPUR, INDIA
+            </p>
+
+            <div class="venue-specs">
+              <div class="venue-spec-item">
+                <span class="spec-key">DATE &amp; TIME</span>
+                <span class="spec-val">26 SEPTEMBER 2026 // 21:00 — 06:00</span>
+              </div>
+              <div class="venue-spec-item">
+                <span class="spec-key">LOCATION</span>
+                <span class="spec-val">ROAR, UDAIPUR</span>
+              </div>
+              <div class="venue-spec-item">
+                <span class="spec-key">DRESS CODE</span>
+                <span class="spec-val">ALL BLACK / AVANT-GARDE</span>
+              </div>
+              <div class="venue-spec-item">
+                <span class="spec-key">SOUND RIG</span>
+                <span class="spec-val">FUNKTION-ONE EVOLUTION</span>
+              </div>
+            </div>
+
+            <div>
+              <button class="btn btn-outline btn-lg" id="btnOpenDirections">GET DIRECTIONS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         TICKET PASSES SECTION
+         ========================================================================== -->
+    <section id="tickets" aria-label="Ticket Passes">
+      <div class="site-container">
+        <div class="tickets-intro">
+          <div class="section-label">04 / ACCESS</div>
+          <h2 class="tickets-headline">CHOOSE YOUR EXPERIENCE</h2>
+          <p class="tickets-sub">LIMITED TO 1,800 ATTENDEES. DIGITAL RFID PASS ISSUED INSTANTLY.</p>
+        </div>
+
+        <div class="tickets-grid">
+          <!-- Early Bird -->
+          <div class="ticket-card" data-tier="early">
+            <div class="ticket-perforation"></div>
+            <div class="ticket-card-header">
+              <span class="ticket-tier-badge">PHASE 01</span>
+              <h3 class="ticket-tier-name">EARLY BIRD</h3>
+              <div class="ticket-price-wrap">
+                <span class="ticket-currency">₹</span>
+                <span class="ticket-price">999</span>
+              </div>
+              <p style="color: var(--gray); font-size: 0.85rem;">Limited initial release for early supporters.</p>
+            </div>
+
+            <ul class="ticket-features">
+              <li class="ticket-feature-item">General Admission to Main Arena</li>
+              <li class="ticket-feature-item">Full Event Access (21:00 — 06:00)</li>
+              <li class="ticket-feature-item">Complimentary Signature Cocktail</li>
+              <li class="ticket-feature-item">Official Apéro RFID Wristband</li>
+            </ul>
+
+            <div class="ticket-bottom-wrap">
+              <div class="ticket-barcode">
+                <div class="barcode-stripes"></div>
+                <span>AP-EB-2026</span>
+              </div>
+              <button class="btn btn-outline open-booking-btn" data-tier="early">BUY TICKET</button>
+            </div>
+          </div>
+
+          <!-- General (Featured) -->
+          <div class="ticket-card featured" data-tier="general">
+            <div class="ticket-perforation"></div>
+            <div class="ticket-card-header">
+              <span class="ticket-tier-badge" style="background: var(--red-subtle); color: var(--red);">MOST POPULAR</span>
+              <h3 class="ticket-tier-name">GENERAL</h3>
+              <div class="ticket-price-wrap">
+                <span class="ticket-currency">₹</span>
+                <span class="ticket-price">1,499</span>
+              </div>
+              <p style="color: var(--gray); font-size: 0.85rem;">Complete event admission with accelerated venue entry.</p>
+            </div>
+
+            <ul class="ticket-features">
+              <li class="ticket-feature-item">Full Event Access (21:00 — 06:00)</li>
+              <li class="ticket-feature-item">Priority Express Queue Entry</li>
+              <li class="ticket-feature-item">Access to Secondary Underground Bar</li>
+              <li class="ticket-feature-item">Digital Holographic Souvenir Pass</li>
+              <li class="ticket-feature-item">Access to Chillout Courtyards</li>
+            </ul>
+
+            <div class="ticket-bottom-wrap">
+              <div class="ticket-barcode">
+                <div class="barcode-stripes"></div>
+                <span>AP-GEN-2026</span>
+              </div>
+              <button class="btn btn-primary open-booking-btn" data-tier="general">BUY TICKET</button>
+            </div>
+          </div>
+
+          <!-- VIP Backstage -->
+          <div class="ticket-card" data-tier="vip">
+            <div class="ticket-perforation"></div>
+            <div class="ticket-card-header">
+              <span class="ticket-tier-badge" style="border-color: var(--white); color: var(--white);">LIMITED 200</span>
+              <h3 class="ticket-tier-name">VIP PASS</h3>
+              <div class="ticket-price-wrap">
+                <span class="ticket-currency">₹</span>
+                <span class="ticket-price">2,999</span>
+              </div>
+              <p style="color: var(--gray); font-size: 0.85rem;">Unrestricted backstage immersion & elevated luxury.</p>
+            </div>
+
+            <ul class="ticket-features">
+              <li class="ticket-feature-item">VIP Dedicated Fast-Track Concierge</li>
+              <li class="ticket-feature-item">Backstage &amp; Artist Viewing Deck</li>
+              <li class="ticket-feature-item">Access to Private VIP Lounge &amp; Bar</li>
+              <li class="ticket-feature-item">Complimentary Curated Bar Service</li>
+              <li class="ticket-feature-item">Exclusive Limited-Edition Apéro Merch</li>
+            </ul>
+
+            <div class="ticket-bottom-wrap">
+              <div class="ticket-barcode">
+                <div class="barcode-stripes"></div>
+                <span>AP-VIP-2026</span>
+              </div>
+              <button class="btn btn-primary open-booking-btn" data-tier="vip" style="background: var(--white); color: var(--black); box-shadow: 0 0 25px rgba(255,255,255,0.2);">BUY VIP</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         GALLERY SECTION
+         ========================================================================== -->
+    <section id="gallery" aria-label="Event Gallery">
+      <div class="site-container">
+        <div class="section-label">05 / ATMOSPHERE</div>
+        <h2 class="display-title" style="font-size: clamp(2.8rem, 6vw, 5rem); margin-bottom: 3rem;">GALLERY</h2>
+        
+        <div class="gallery-grid">
+          <div class="gallery-item wide">
+            <img src="assets/images/vanue/gallery /venue2.jpeg" alt="ROAR Udaipur venue interior" class="gallery-img">
+          </div>
+          
+          <div class="gallery-item tall">
+            <img src="assets/images/vanue/gallery /venue3.jpeg" alt="ROAR Udaipur venue atmosphere" class="gallery-img">
+          </div>
+          
+          <div class="gallery-item large">
+            <img src="assets/images/vanue/gallery /gallery.jpeg" alt="Apéro event atmosphere" class="gallery-img">
+          </div>
+          
+          <div class="gallery-item tall">
+            <img src="assets/images/vanue/gallery /gallery2.jpeg" alt="Event venue details" class="gallery-img">
+          </div>
+          
+          <div class="gallery-item wide">
+            <img src="assets/images/vanue/gallery /venue1.jpeg" alt="ROAR Udaipur exterior" class="gallery-img">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FINAL CTA SECTION
+         ========================================================================== -->
+    <section id="finalCta" aria-label="Final Ticket Call to Action">
+      <div class="final-cta-bg-glow" aria-hidden="true"></div>
+      <div class="site-container final-cta-content">
+        <div class="section-label">JOIN THE COMMUNION</div>
+        <h2 class="display-title final-title">
+          SEE YOU<br>
+          <span class="text-accent-red">AFTER DARK.</span>
+        </h2>
+        <p class="final-sub">26 SEPTEMBER 2026 // RAJASTHAN // STEP INTO THE VOID</p>
+        <button class="btn btn-primary btn-lg open-booking-btn" data-tier="general">GET YOUR TICKET</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer id="footer">
+    <div class="site-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#hero" class="footer-logo">APÉRO</a>
+          <p class="footer-tagline">
+            An uncompromising nocturnal gathering dedicated to forward-thinking electronic soundscapes, spatial design, and luxury underground aesthetics.
+          </p>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-col">
+            <span class="footer-col-title">NAVIGATION</span>
+            <a href="#about" class="footer-link">Experience</a>
+            <a href="#artists" class="footer-link">Artists</a>
+            <a href="#venue" class="footer-link">Venue</a>
+            <a href="#gallery" class="footer-link">Gallery</a>
+            <a href="#tickets" class="footer-link">Tickets</a>
+          </div>
+
+          <div class="footer-col">
+            <span class="footer-col-title">DISPATCHES</span>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-link">Instagram</a>
+            <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="footer-link">Spotify</a>
+            <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer" class="footer-link">Soundcloud</a>
+            <a href="mailto:access@apero.club" class="footer-link">Contact</a>
+          </div>
+
+          <div class="footer-col">
+            <span class="footer-col-title">LEGAL</span>
+            <a href="#" class="footer-link" id="legalTermsBtn">Terms of Access</a>
+            <a href="#" class="footer-link" id="legalPrivacyBtn">Privacy Policy</a>
+            <a href="#" class="footer-link" id="legalCodeBtn">Code of Conduct</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 APÉRO NIGHTLIFE. ALL RIGHTS RESERVED.</div>
+        <div>UDAIPUR, INDIA &bull; STRICTLY 21+</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       TICKET BOOKING MODAL (<dialog>)
+       ========================================================================== -->
+  <dialog id="bookingModal" aria-labelledby="modalHeading">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-eyebrow">RESERVATION TERMINAL</span>
+          <h3 class="modal-title" id="modalHeading">SECURE PASS</h3>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Reservation Window">&times;</button>
+      </div>
+
+      <!-- Step 1: Form -->
+      <form id="bookingForm" class="modal-body" method="dialog">
+        <div class="form-group">
+          <label for="bookName" class="form-label">Full Name</label>
+          <input type="text" id="bookName" class="form-input" placeholder="e.g. Aryan Malhotra" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="bookEmail" class="form-label">Email Address (For RFID Pass Delivery)</label>
+          <input type="email" id="bookEmail" class="form-input" placeholder="e.g. aryan@apero.club" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="bookPhone" class="form-label">Phone Number (+91)</label>
+          <input type="tel" id="bookPhone" class="form-input" placeholder="e.g. 9876543210" required autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+          <label for="bookTier" class="form-label">Pass Tier</label>
+          <select id="bookTier" class="form-select">
+            <option value="early" data-price="999">EARLY BIRD — ₹999</option>
+            <option value="general" data-price="1499" selected>GENERAL ADMISSION — ₹1,499</option>
+            <option value="vip" data-price="2999">VIP BACKSTAGE PASS — ₹2,999</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Quantity (Max 10 per order)</label>
+          <div class="quantity-control">
+            <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-display" id="qtyDisplay">1</span>
+            <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">&#43;</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Live Order Summary -->
+        <div class="order-summary">
+          <div class="summary-row">
+            <span>Pass Type</span>
+            <span id="sumTierName">GENERAL ADMISSION</span>
+          </div>
+          <div class="summary-row">
+            <span>Subtotal (<span id="sumQtyLabel">1</span> &times; <span id="sumPriceLabel">₹1,499</span>)</span>
+            <span id="sumSubtotal">₹1,499</span>
+          </div>
+          <div class="summary-row">
+            <span>GST &amp; Entertainment Levy (18%)</span>
+            <span id="sumTax">₹270</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total Payable</span>
+            <span class="total-price" id="sumTotal">₹1,769</span>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="padding: 0; margin-top: 1rem;">
+          <button type="submit" class="btn btn-primary btn-lg" id="submitBookingBtn" style="width: 100%;">
+            CONTINUE TO BOOKING
+          </button>
+          <p style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--gray); text-align: center; letter-spacing: 0.15em;">
+            ENCRYPTED 256-BIT RESERVATION &bull; NO REFUNDS AFTER SEP 15
+          </p>
+        </div>
+      </form>
+
+      <!-- Step 2: Instant Confirmation Voucher View -->
+      <div class="booking-success-view" id="bookingSuccessView">
+        <div class="success-icon-wrap">&check;</div>
+        <h3 class="success-title">RESERVATION CONFIRMED</h3>
+        <p class="success-desc">
+          Your RFID access pass has been reserved under <strong id="confirmedHolderName" style="color: var(--white);"></strong>. A confirmation dispatch has been sent to your email.
+        </p>
+
+        <div class="pass-preview-badge">
+          <div>
+            <div style="color: var(--gray); font-size: 0.7rem; margin-bottom: 0.2rem;">REFERENCE ID</div>
+            <div id="confirmedBookingRef" style="color: var(--red); font-weight: 700; letter-spacing: 0.1em;">APÉRO-2026-9842</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="color: var(--gray); font-size: 0.7rem; margin-bottom: 0.2rem;">PASS TIER</div>
+            <div id="confirmedTier" style="font-weight: 700;">GENERAL</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-outline btn-lg" id="btnFinishBooking" style="width: 100%;">
+          CLOSE TERMINAL
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ==========================================================================
+       VENUE DIRECTIONS MODAL (<dialog>)
+       ========================================================================= -->
+  <dialog id="venueDirectionsModal" aria-labelledby="directionsHeading">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      <h3 id="directionsHeading" style="font-family: var(--font-display); font-size: 1.6rem; text-transform: uppercase;">VENUE LOCATION</h3>
+      <button class="modal-close-btn" id="closeDirectionsBtn">&times;</button>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; color: var(--white-muted); margin-bottom: 2rem;">
+      <p><strong style="color: var(--white);">VENUE:</strong> ROAR</p>
+      <p><strong style="color: var(--white);">LOCATION:</strong> Udaipur, India</p>
+      <p><strong style="color: var(--white);">DATE:</strong> 26 September 2026</p>
+      <p><strong style="color: var(--white);">TIME:</strong> 21:00 — 06:00</p>
+    </div>
+    <a href="https://maps.app.goo.gl/7ngaotbcw8hsgATZ9" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%;">
+      OPEN IN GOOGLE MAPS
+    </a>
+  </dialog>
+
+  <!-- External Libraries: GSAP, ScrollTrigger, Lenis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- Modular Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/booking.js"></script>
+</body>
+</html>
