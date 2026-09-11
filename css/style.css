@@ -368,11 +368,6 @@ html.lenis, html.lenis body {
   align-items: center;
 }
 
-@media (max-width: 540px) {
-  .nav-contact-link {
-    display: none;
-  }
-}
 
 /* Minimal Sound Toggle */
 .sound-toggle {
@@ -524,6 +519,12 @@ html.lenis, html.lenis body {
   gap: 6px;
   padding: 8px;
   z-index: 1001;
+}
+
+@media (max-width: 859px) {
+  .menu-toggle {
+    display: none !important;
+  }
 }
 
 @media (min-width: 860px) {
@@ -2286,20 +2287,20 @@ html {
     min-height: 44px;
   }
 
-  /* Contact link hidden on very small screens — accessible via drawer */
-  .nav-contact-link {
-    display: none;
-  }
-}
-
-/* Show contact link on slightly wider small phones */
-@media (min-width: 420px) and (max-width: 768px) {
+  /* Contact link remains visible on mobile */
   .nav-contact-link {
     display: inline-flex;
     font-size: 0.68rem;
     letter-spacing: 0.15em;
+    padding: 0.45rem 0.5rem;
+  }
+
+  /* Three-dot / hamburger menu toggle hidden on mobile */
+  .menu-toggle {
+    display: none !important;
   }
 }
+
 
 /* Sound toggle compact on small screens */
 @media (max-width: 480px) {
@@ -2855,19 +2856,8 @@ html {
   button,
   a.btn,
   .open-booking-btn,
-  .menu-toggle,
   .sound-toggle {
     min-height: 44px;
-  }
-
-  /* Hamburger larger hit area */
-  .menu-toggle {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
   }
 }
 

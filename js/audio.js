@@ -1,13 +1,14 @@
 /**
  * Apéro — Background Audio Controller
  *
- * Key behaviors:
- *  1. Default ON for first-time visitors (no saved preference).
- *  2. User can explicitly toggle OFF/ON — preference persisted in localStorage.
- *  3. Tab hidden  → pause automatically (NOT saved as user preference).
- *  4. Tab visible → resume only when user preference is ON.
- *  5. Browser autoplay block → silent gesture-unlock; preference unchanged.
- *  6. Single audio instance, single visibilitychange listener.
+ * Requirements:
+ *  1. Silent by default when entering the website (no automatic playback).
+ *  2. Existing "SOUND OFF" button shown initially as the single audio control.
+ *  3. Clicking the Sound button starts the APÉRO background song and updates UI to SOUND ON.
+ *  4. Clicking it again pauses/stops the song and returns UI to SOUND OFF.
+ *  5. Tab hidden -> temporarily pause audio if currently playing.
+ *  6. Tab visible -> resume audio only if it was playing before switching tabs.
+ *  7. Single audio instance, zero console errors, zero duplicate elements.
  */
 
 (function () {
@@ -17,58 +18,20 @@
   // CONFIG
   // ─────────────────────────────────────────────────────────────────────────
   const CONFIG = {
-    src:           'assets/audio/apero.mp3',
-    volume:        0.6,
-    fadeIn:        2.2,   // seconds — initial fade
-    fadeToggle:    0.8    // seconds — manual toggle fade
+    src:        'assets/audio/apero.mp3',
+    volume:     0.6,
+    fadeIn:     1.5,   // seconds — fade on user play
+    fadeOut:    0.6    // seconds — fade on user pause / tab hide
   };
-
-  const PREF_KEY = 'aperoMusicPreference'; // localStorage key: 'on' | 'off'
 
   // ─────────────────────────────────────────────────────────────────────────
   // STATE
-  //   isPlaying        — whether audio is currently playing and audible
-  //   unlockRegistered — whether gesture-unlock listeners are currently active
-  //   unlockHandler    — reference to the unlock callback for cleanup
-  //   fadeTween        — active GSAP tween handle
-  //   audio            — single HTMLAudioElement instance
   // ─────────────────────────────────────────────────────────────────────────
-  let audio             = null;
-  let isPlaying         = false;
-  let unlockRegistered  = false;
-  let unlockHandler     = null;
-  let fadeTween         = null;
-  const vol             = { v: 0 }; // GSAP animates this proxy
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // PREFERENCE HELPERS
-  // ─────────────────────────────────────────────────────────────────────────
-
-  /** Read saved preference: returns "on" | "off" | null (first visit). */
-  function readPref() {
-    try {
-      return localStorage.getItem(PREF_KEY);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  /**
-   * Persist explicit user choice.
-   * ONLY called from toggleSound() — never from autoplay or tab-visibility events.
-   */
-  function savePref(value /* "on" | "off" */) {
-    try {
-      localStorage.setItem(PREF_KEY, value);
-    } catch (_) {}
-  }
-
-  /**
-   * True when user preference is ON (explicitly "on" OR no preference yet -> default ON).
-   */
-  function prefIsOn() {
-    return readPref() !== 'off';
-  }
+  let audio              = null;   // Single HTMLAudioElement
+  let isPlaying          = false;  // User has started playback
+  let wasPlayingOnHide   = false;  // Preserved across visibility changes
+  let fadeTween          = null;   // Active GSAP tween handle
+  const vol              = { v: 0 }; // Proxy for volume interpolation
 
   // ─────────────────────────────────────────────────────────────────────────
   // SINGLETON AUDIO ELEMENT
@@ -79,7 +42,7 @@
     audio.src      = CONFIG.src;
     audio.loop     = true;
     audio.preload  = 'auto';
-    audio.volume   = 0; // Starts at 0; smoothly faded in
+    audio.volume   = 0;
     return audio;
   }
 
@@ -115,33 +78,18 @@
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // INTERNAL PLAY / PAUSE (never touch preference)
+  // PLAY / PAUSE
   // ─────────────────────────────────────────────────────────────────────────
 
   /**
-   * Attempt to start playback.
-   * @param {number} [fadeSeconds] - duration of volume fade-in
-   * @param {Function} [onBlocked] - called if browser blocks autoplay
+   * Start playback with volume fade-in.
    */
-  function startAudio(fadeSeconds, onBlocked) {
-    // If preference is explicitly OFF, never start
-    if (!prefIsOn()) return;
-
+  function startPlayback(fadeDuration) {
     const snd = getAudio();
-    const dur = (typeof fadeSeconds === 'number') ? fadeSeconds : CONFIG.fadeIn;
-
-    // If already playing smoothly, don't restart
-    if (isPlaying && !snd.paused && vol.v >= CONFIG.volume * 0.9) {
-      updateUI(true);
-      return;
-    }
-
-    snd.volume = 0;
-    vol.v = 0;
+    const dur = (typeof fadeDuration === 'number') ? fadeDuration : CONFIG.fadeIn;
 
     const p = snd.play();
     if (p === undefined) {
-      // Legacy browser without promise
       isPlaying = true;
       updateUI(true);
       fadeTo(CONFIG.volume, dur);
@@ -152,120 +100,52 @@
       isPlaying = true;
       updateUI(true);
       fadeTo(CONFIG.volume, dur);
-    }).catch((err) => {
+    }).catch(() => {
+      // Browser blocked play
       isPlaying = false;
-      // Do NOT overwrite user preference on block.
-      // Keep UI showing current preference (ON).
-      updateUI(prefIsOn());
-      if (onBlocked) onBlocked(err);
+      updateUI(false);
     });
   }
 
   /**
-   * Pause with volume fade-out. Never alters saved preference.
-   * @param {number} [fadeSeconds]
-   * @param {Function} [done]
+   * Stop / pause playback with volume fade-out.
    */
-  function pauseAudio(fadeSeconds, done) {
-    const snd = getAudio();
-    const dur = (typeof fadeSeconds === 'number') ? fadeSeconds : 0.3;
+  function pausePlayback(fadeDuration, done) {
+    if (!audio) {
+      isPlaying = false;
+      updateUI(false);
+      if (done) done();
+      return;
+    }
+
+    const dur = (typeof fadeDuration === 'number') ? fadeDuration : CONFIG.fadeOut;
 
     fadeTo(0, dur, () => {
-      // Only pause if tab is hidden or user has turned sound off
-      if (document.visibilityState === 'hidden' || !prefIsOn()) {
-        snd.pause();
+      if (audio) {
+        audio.pause();
       }
       isPlaying = false;
+      updateUI(false);
       if (done) done();
     });
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // GESTURE UNLOCK
-  // Registered when autoplay is blocked by browser policy.
-  // Resumes on first user interaction, then deregisters completely.
-  // Never changes saved preference.
-  // ─────────────────────────────────────────────────────────────────────────
-  const UNLOCK_EVENTS = ['click', 'touchstart', 'pointerdown', 'keydown'];
-
-  function registerGestureUnlock() {
-    if (unlockRegistered) return;
-    unlockRegistered = true;
-
-    unlockHandler = function () {
-      cleanupGestureUnlock();
-
-      if (!prefIsOn()) return; // User turned it OFF in the meantime
-      if (isPlaying) return;   // Already playing
-
-      startAudio(CONFIG.fadeIn);
-    };
-
-    UNLOCK_EVENTS.forEach(evt => {
-      document.addEventListener(evt, unlockHandler, { passive: true });
-    });
-  }
-
-  function cleanupGestureUnlock() {
-    if (!unlockRegistered) return;
-    unlockRegistered = false;
-    if (unlockHandler) {
-      UNLOCK_EVENTS.forEach(evt => {
-        document.removeEventListener(evt, unlockHandler);
-      });
-      unlockHandler = null;
-    }
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // PAGE VISIBILITY (Tab hidden / visible)
-  // Critical: NEVER saves preference here.
-  // ─────────────────────────────────────────────────────────────────────────
-  function onVisibilityChange() {
-    if (document.visibilityState === 'hidden') {
-      // Tab minimized / switched away — pause silently
-      if (isPlaying) {
-        pauseAudio(0.3);
-      }
-    } else {
-      // Tab returned to — resume only when preference is ON
-      if (prefIsOn() && !isPlaying) {
-        startAudio(CONFIG.fadeIn, () => {
-          registerGestureUnlock();
-        });
-      }
-    }
-  }
-
-  // Single listener — registered once, never duplicated
-  document.addEventListener('visibilitychange', onVisibilityChange);
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // USER TOGGLE — the ONLY place that updates & saves preference
+  // USER TOGGLE
   // ─────────────────────────────────────────────────────────────────────────
   function toggleSound() {
-    // Cancel any pending gesture unlock — user took explicit action
-    cleanupGestureUnlock();
-
-    if (prefIsOn()) {
-      // User is explicitly turning OFF
-      savePref('off');
-      updateUI(false);
-      pauseAudio(CONFIG.fadeToggle, () => {
-        const snd = getAudio();
-        snd.pause();
-      });
-      isPlaying = false;
+    if (isPlaying) {
+      // User presses button while playing -> turn OFF
+      wasPlayingOnHide = false;
+      pausePlayback(CONFIG.fadeOut);
     } else {
-      // User is explicitly turning ON
-      savePref('on');
-      updateUI(true);
-      startAudio(CONFIG.fadeToggle);
+      // User presses button while OFF -> turn ON
+      startPlayback(CONFIG.fadeIn);
     }
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // UI SYNC
+  // UI SYNCHRONIZATION
   // ─────────────────────────────────────────────────────────────────────────
   function updateUI(on) {
     const btn  = document.getElementById('soundToggle');
@@ -283,32 +163,38 @@
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // BOOT — called on DOMContentLoaded
+  // PAGE VISIBILITY (Tab hidden / visible)
   // ─────────────────────────────────────────────────────────────────────────
-  function boot() {
-    getAudio(); // instantiate + begin buffering
-
-    if (!prefIsOn()) {
-      // Explicit saved preference is OFF — stay silent, no gesture unlock
-      updateUI(false);
-      return;
+  function onVisibilityChange() {
+    if (document.visibilityState === 'hidden') {
+      // Tab minimized or switched away
+      if (isPlaying) {
+        wasPlayingOnHide = true;
+        // Pause audio silently when leaving tab
+        if (audio) {
+          audio.pause();
+        }
+      }
+    } else {
+      // Tab returned to foreground
+      if (wasPlayingOnHide) {
+        wasPlayingOnHide = false;
+        // Resume playback smoothly if user had sound ON
+        startPlayback(CONFIG.fadeIn);
+      }
     }
-
-    // Default ON (or saved ON) — ensure UI shows ON state immediately
-    updateUI(true);
-
-    // Attempt autoplay immediately
-    startAudio(CONFIG.fadeIn, () => {
-      // Autoplay blocked by browser: register gesture unlock, do NOT change preference
-      registerGestureUnlock();
-    });
   }
 
+  document.addEventListener('visibilitychange', onVisibilityChange);
+
   // ─────────────────────────────────────────────────────────────────────────
-  // INIT
+  // INIT — runs on DOMContentLoaded
   // ─────────────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    // Wire toggle button
+    // Ensure UI starts strictly in the OFF state
+    updateUI(false);
+
+    // Wire single click listener to existing sound toggle button
     const btn = document.getElementById('soundToggle');
     if (btn) {
       btn.addEventListener('click', (e) => {
@@ -316,29 +202,22 @@
         toggleSound();
       });
     }
-
-    // Attempt autoplay & sync UI
-    boot();
   });
 
   // ─────────────────────────────────────────────────────────────────────────
-  // GLOBAL API (called by animations.js at 99% preloader)
+  // GLOBAL API
   // ─────────────────────────────────────────────────────────────────────────
   window.AperoAudio = {
     /**
-     * Called by animations.js when preloader reaches ~99%.
-     * Safe no-op if already playing or if user set preference to OFF.
+     * Safe no-op: page entrance must remain silent by default.
      */
     startAt99Percent() {
-      if (isPlaying) return;
-      if (!prefIsOn()) return;
-      startAudio(CONFIG.fadeIn, () => registerGestureUnlock());
+      // Do nothing — sound is off by default
     },
 
     toggle:           toggleSound,
     isPlaying:        () => isPlaying,
-    getAudioInstance: () => audio,
-    getPreference:    readPref
+    getAudioInstance: () => audio
   };
 
 })();

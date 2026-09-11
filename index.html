@@ -62,26 +62,14 @@
       </a>
 
       <div class="nav-actions">
-        <button class="sound-toggle playing" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="true" title="Toggle Sound">
+        <button class="sound-toggle" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="false" title="Toggle Sound">
           <span class="sound-bars" aria-hidden="true">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
           </span>
-          <span class="sound-text" id="soundText">SOUND ON</span>
+          <span class="sound-text" id="soundText">SOUND OFF</span>
         </button>
-        <script>
-          (function() {
-            try {
-              if (localStorage.getItem('aperoMusicPreference') === 'off') {
-                var b = document.getElementById('soundToggle');
-                if (b) { b.classList.remove('playing'); b.setAttribute('aria-pressed', 'false'); }
-                var t = document.getElementById('soundText');
-                if (t) { t.textContent = 'SOUND OFF'; }
-              }
-            } catch (_) {}
-          })();
-        </script>
         <a href="#footer" class="nav-link nav-contact-link">CONTACT</a>
         <button class="btn btn-primary btn-sm open-booking-btn" data-tier="general" aria-label="Book Tickets">BOOK TICKET</button>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle Mobile Navigation" aria-expanded="false">
@@ -204,40 +192,6 @@
           </div>
         </div>
 
-        <!-- 4 Pillars of Experience -->
-        <div class="experience-grid">
-          <div class="experience-card">
-            <div class="exp-num">01</div>
-            <div>
-              <h3 class="exp-title">SONIC ARCHITECTURE</h3>
-              <p class="exp-desc">Custom-engineered Funktion-One acoustics calibrated specifically for sub-bass physical resonance and pristine highs.</p>
-            </div>
-          </div>
-
-          <div class="experience-card">
-            <div class="exp-num">02</div>
-            <div>
-              <h3 class="exp-title">HYPER LIGHT</h3>
-              <p class="exp-desc">Brutalist crimson laser arrays, volumetric stage haze, and kinetic strobe sculptures that warp spatial perception.</p>
-            </div>
-          </div>
-
-          <div class="experience-card">
-            <div class="exp-num">03</div>
-            <div>
-              <h3 class="exp-title">RAW ENERGY</h3>
-              <p class="exp-desc">Nine continuous hours of relentless tempo from 135 to 148 BPM. No VIP velvet rope segregation on the dancefloor.</p>
-            </div>
-          </div>
-
-          <div class="experience-card">
-            <div class="exp-num">04</div>
-            <div>
-              <h3 class="exp-title">THE COMMUNION</h3>
-              <p class="exp-desc">A carefully vetted gathering of 1,800 like-minded aesthetes, clubbers, and international artists under one night sky.</p>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
