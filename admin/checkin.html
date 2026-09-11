@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- admin/checkin.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APERO Admin — Check-in</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="admin-topbar">
+    <div class="admin-topbar-inner">
+      <div class="brand">APERO <small>ADMIN PORTAL</small></div>
+      <nav class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="bookings.html">Bookings</a>
+        <a href="checkin.html" class="active">Check-in</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </nav>
+    </div>
+  </header>
+  <div class="container">
+    <h1>Gate check-in</h1>
+    <p class="muted">Enter a booking reference (e.g. <code class="inline">APERO-2026-1001</code>) to verify and check in a guest.</p>
+    <div id="alert" class="alert error" style="display:none"></div>
+    <div id="ok" class="alert success" style="display:none"></div>
+    <div class="card">
+      <form id="checkinForm">
+        <div class="form-group">
+          <label for="ref">Booking reference</label>
+          <input id="ref" type="text" placeholder="APERO-2026-XXXX" autocomplete="off" required style="text-transform:uppercase">
+        </div>
+        <div class="row-2">
+          <button class="btn-primary" id="lookupBtn" type="submit">Verify &amp; check in</button>
+          <button class="btn-secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+      </form>
+    </div>
+    <div class="card" id="resultCard" style="display:none">
+      <h2>Guest pass</h2>
+      <div id="resultBody"></div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      if (!AperoAdmin.requireAuth()) return;
+      document.getElementById('logoutLink').addEventListener('click', function (e) {
+        e.preventDefault();
+        AperoAdmin.logout();
+      });
+      var alertBox = document.getElementById('alert');
+      var okBox = document.getElementById('ok');
+      var btn = document.getElementById('lookupBtn');
+      var resultCard = document.getElementById('resultCard');
+      var resultBody = document.getElementById('resultBody');
+      function render(b, already) {
+        resultCard.style.display = 'block';
+        resultBody.innerHTML =
+          '<p><strong>' + AperoAdmin.esc(b.holder_name) + '</strong> · <code class="inline">' + AperoAdmin.esc(b.booking_ref) + '</code></p>' +
+          '<p class="muted">' + AperoAdmin.esc(b.tier) + ' × ' + b.quantity + ' · ' + AperoAdmin.esc(b.email) + ' · ' + AperoAdmin.esc(b.phone) + ' · Mask: ' + AperoAdmin.esc(b.mask_selected) + '</p>' +
+          '<p>' + (b.check_in_status ? '<span class="badge checked">checked in</span>' : '<span class="badge pending">pending</span>') +
+          (b.rfid_assigned ? ' <span class="badge">RFID ' + AperoAdmin.esc(b.rfid_assigned) + '</span>' : '') + '</p>' +
+          (already ? '<p class="muted">Guest was already checked in at ' + AperoAdmin.esc(b.check_in_time || '—') + '.</p>' : '');
+      }
+      document.getElementById('clearBtn').addEventListener('click', function () {
+        document.getElementById('ref').value = '';
+        AperoAdmin.hideAlert(alertBox);
+        okBox.style.display = 'none';
+        resultCard.style.display = 'none';
+      });
+      document.getElementById('checkinForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        AperoAdmin.hideAlert(alertBox);
+        okBox.style.display = 'none';
+        var ref = document.getElementById('ref').value.trim().toUpperCase();
+        if (!ref) { AperoAdmin.showAlert(alertBox, 'error', 'Please enter a booking reference.'); return; }
+        btn.disabled = true;
+        btn.textContent = 'Checking in...';
+        try {
+          var data = await AperoAdmin.apiFetch('/api/admin/checkin', {
+            method: 'POST',
+            body: { booking_ref: ref }
+          });
+          render(data.booking, !!data.already_checked_in);
+          okBox.textContent = data.already_checked_in ? 'Guest was already checked in.' : 'Check-in successful. Guest is on the list.';
+          okBox.style.display = 'block';
+        } catch (err) {
+          resultCard.style.display = 'none';
+          AperoAdmin.showAlert(alertBox, 'error', err.message || 'Check-in failed');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Verify & check in';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- admin/login.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APERO Admin — Login</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="container">
+    <div class="login-wrap">
+      <div class="card">
+        <div class="brand">APERO <small>ADMIN PORTAL</small></div>
+        <h1>Login</h1>
+        <p class="muted">Use the admin email and password configured on the server.</p>
+        <div id="alert" class="alert error" style="display:none"></div>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">Admin email</label>
+            <input id="email" type="email" autocomplete="username" required placeholder="admin@aperonight.fun">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+          </div>
+          <button class="btn-primary" id="loginBtn" type="submit">Log in</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('loginForm');
+      var alertBox = document.getElementById('alert');
+      var btn = document.getElementById('loginBtn');
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        AperoAdmin.hideAlert(alertBox);
+        btn.disabled = true;
+        btn.textContent = 'Logging in...';
+        try {
+          var email = document.getElementById('email').value.trim().toLowerCase();
+          var password = document.getElementById('password').value;
+          var data = await AperoAdmin.apiFetch('/api/admin/login', {
+            method: 'POST',
+            body: { email: email, password: password }
+          });
+          if (!data || !data.token) throw new Error('Login failed: no token returned');
+          AperoAdmin.setToken(data.token);
+          window.location.href = 'dashboard.html';
+        } catch (err) {
+          AperoAdmin.showAlert(alertBox, 'error', err.message || 'Login failed');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Log in';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

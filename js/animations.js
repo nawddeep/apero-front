@@ -242,6 +242,8 @@
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+    const isMobile = window.innerWidth <= 768;
+
     // --- Statement Text Scrub Reveal ---
     const words = document.querySelectorAll('.statement-headline .reveal-word');
     if (words.length > 0) {
@@ -357,7 +359,6 @@
 
     // --- Gallery Parallax Elements ---
     const galleryItems = document.querySelectorAll('.gallery-item');
-    const isMobile = window.innerWidth <= 768;
     
     galleryItems.forEach((item, index) => {
       // Reduce parallax intensity on mobile for better performance

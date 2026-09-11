@@ -69,14 +69,37 @@ apero/
 
 ## ✦ Running Locally
 
-Start a local static server using Python or Node:
+Backend API + static site (recommended):
 
 ```bash
-# Using Python 3
-python3 -m http.server 3000
-
-# Or using npx serve
-npx serve .
+npm install
+cp .env.example .env
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:5000](http://localhost:5000) in your browser.
+
+Static-only preview (no booking API):
+
+```bash
+python3 -m http.server 3000
+```
+
+---
+
+## ✦ Booking API
+
+- `POST /api/bookings` — create a booking
+- `GET /api/bookings/:id` — get one booking by `APERO-2026-XXXX`
+- `POST /api/admin/login` — admin login, returns JWT
+- `GET /api/admin/bookings` — list bookings (JWT)
+- `POST /api/admin/checkin` — check in a guest (JWT)
+- `GET /api/admin/stats` — dashboard stats (JWT)
+- `GET /api/admin/export` — CSV export (JWT)
+
+Admin portal: `/admin/login.html`
+
+> Data persistence note: the default store in `lib/db.js` is in-memory and
+> will NOT persist across Vercel serverless invocations or restarts. This
+> setup is for local development and API testing only, not production. Swap
+> in MongoDB/PostgreSQL behind the same `lib/db.js` functions for production.

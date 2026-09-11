@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- admin/dashboard.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APERO Admin — Dashboard</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="admin-topbar">
+    <div class="admin-topbar-inner">
+      <div class="brand">APERO <small>ADMIN PORTAL</small></div>
+      <nav class="nav-links">
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="bookings.html">Bookings</a>
+        <a href="checkin.html">Check-in</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </nav>
+    </div>
+  </header>
+  <div class="container">
+    <h1>Dashboard</h1>
+    <p class="muted">Live overview of ticket sales and gate activity.</p>
+    <div id="alert" class="alert error" style="display:none"></div>
+    <div class="grid-stats" id="statsGrid">
+      <div class="stat"><div class="label">Total bookings</div><div class="value" id="stBookings">—</div></div>
+      <div class="stat"><div class="label">Total guests</div><div class="value" id="stGuests">—</div></div>
+      <div class="stat"><div class="label">Total revenue</div><div class="value" id="stRevenue">—</div></div>
+      <div class="stat"><div class="label">Checked in</div><div class="value" id="stChecked">—</div></div>
+    </div>
+    <div class="card">
+      <h2>Sales by tier</h2>
+      <div id="byTier" class="muted">Loading...</div>
+    </div>
+    <div class="card">
+      <h2>Recent bookings</h2>
+      <div class="toolbar">
+        <button class="btn-secondary" id="refreshBtn" type="button">Refresh</button>
+        <button class="btn-secondary" id="exportBtn" type="button">Export CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ref</th><th>Holder</th><th>Tier</th><th>Qty</th><th>Total</th><th>Status</th></tr>
+          </thead>
+          <tbody id="recentBody"><tr><td colspan="6">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      if (!AperoAdmin.requireAuth()) return;
+      document.getElementById('logoutLink').addEventListener('click', function (e) {
+        e.preventDefault();
+        AperoAdmin.logout();
+      });
+      var alertBox = document.getElementById('alert');
+      function inr(n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); }
+      async function load() {
+        AperoAdmin.hideAlert(alertBox);
+        try {
+          var s = await AperoAdmin.apiFetch('/api/admin/stats');
+          var st = s.stats;
+          document.getElementById('stBookings').textContent = st.total_bookings;
+          document.getElementById('stGuests').textContent = st.total_guests;
+          document.getElementById('stRevenue').textContent = inr(st.total_revenue);
+          document.getElementById('stChecked').textContent = st.checked_in + ' / ' + st.total_bookings;
+          var tiers = st.by_tier || {};
+          var keys = Object.keys(tiers);
+          document.getElementById('byTier').innerHTML = keys.length
+            ? keys.map(function (k) { return '<span class="badge">' + AperoAdmin.esc(k) + ': ' + tiers[k] + '</span>'; }).join(' ')
+            : 'No sales yet.';
+          var b = await AperoAdmin.apiFetch('/api/admin/bookings');
+          var rows = (b.bookings || []).slice(0, 10);
+          var tb = document.getElementById('recentBody');
+          if (!rows.length) { tb.innerHTML = '<tr><td colspan="6">No bookings yet.</td></tr>'; return; }
+          tb.innerHTML = rows.map(function (r) {
+            return '<tr><td><code class="inline">' + AperoAdmin.esc(r.booking_ref) + '</code></td>' +
+              '<td>' + AperoAdmin.esc(r.holder_name) + '<br><span class="muted">' + AperoAdmin.esc(r.email) + '</span></td>' +
+              '<td>' + AperoAdmin.esc(r.tier) + '</td><td>' + r.quantity + '</td><td>' + inr(r.total) + '</td>' +
+              '<td>' + (r.check_in_status ? '<span class="badge checked">checked in</span>' : '<span class="badge pending">pending</span>') + '</td></tr>';
+          }).join('');
+        } catch (err) {
+          AperoAdmin.showAlert(alertBox, 'error', err.message || 'Failed to load dashboard');
+        }
+      }
+      document.getElementById('refreshBtn').addEventListener('click', load);
+      document.getElementById('exportBtn').addEventListener('click', async function () {
+        AperoAdmin.hideAlert(alertBox);
+        try {
+          var token = AperoAdmin.getToken();
+          var controller = new AbortController();
+          var timer = setTimeout(function () { controller.abort(); }, 15000);
+          try {
+            var res = await fetch('/api/admin/export', {
+              headers: { Authorization: 'Bearer ' + token },
+              signal: controller.signal
+            });
+            if (res.status === 401) { AperoAdmin.logout(); return; }
+            if (!res.ok) throw new Error('Export failed (' + res.status + ')');
+            var blob = await res.blob();
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'apero-bookings.csv';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          } finally {
+            clearTimeout(timer);
+          }
+        } catch (err) {
+          AperoAdmin.showAlert(alertBox, 'error', err.message || 'Export failed');
+        }
+      });
+      load();
+    })();
+  </script>
+</body>
+</html>

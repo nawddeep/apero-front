@@ -542,60 +542,100 @@
       });
     }
 
-    // Step 4: Final Confirmation and Ticket Allocation
+    // Step 4: Final Confirmation and Ticket Allocation (real backend, never stuck)
     if (btnFinalConfirmPayment) {
-      btnFinalConfirmPayment.addEventListener('click', () => {
+      btnFinalConfirmPayment.addEventListener('click', async () => {
         const originalText = btnFinalConfirmPayment.innerHTML;
         btnFinalConfirmPayment.disabled = true;
         btnFinalConfirmPayment.innerHTML = 'ENCRYPTING &amp; ALLOCATING PASSES...';
-
-        const tierData = TIERS[bookingState.ticketId] || TIERS['early-bird'];
-        const totalGuests = tierData.people * bookingState.quantity;
-
-        const bookingPayload = {
-          ticketId: bookingState.ticketId,
-          ticketName: bookingState.ticketName,
-          price: tierData.price,
-          perPerson: tierData.perPerson,
-          quantity: bookingState.quantity,
-          totalGuests: totalGuests,
-          selectedMask: bookingState.selectedMask,
-          maskName: bookingState.selectedMaskName,
-          user: { ...bookingState.user },
-          subtotal: tierData.price * bookingState.quantity,
-          tax: Math.round(tierData.price * bookingState.quantity * GST_RATE),
-          total: Math.round(tierData.price * bookingState.quantity * (1 + GST_RATE)),
-          timestamp: new Date().toISOString()
-        };
-
-        if (window.AperoBooking && typeof window.AperoBooking.onBookingSubmit === 'function') {
-          window.AperoBooking.onBookingSubmit(bookingPayload);
-        }
-
-        setTimeout(() => {
-          btnFinalConfirmPayment.disabled = false;
-          btnFinalConfirmPayment.innerHTML = originalText;
-
-          const randomRef = `APÉRO-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+        showBookingError('');
+        let controller = null;
+        let timeoutId = null;
+        try {
+          const tierData = TIERS[bookingState.ticketId] || TIERS['early-bird'];
+          const totalGuests = tierData.people * bookingState.quantity;
+          controller = new AbortController();
+          timeoutId = setTimeout(() => controller.abort(), 15000);
+          const res = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tier: bookingState.ticketId,
+              quantity: bookingState.quantity,
+              holder_name: bookingState.user.name,
+              email: bookingState.user.email,
+              phone: bookingState.user.phone,
+              mask_selected: bookingState.selectedMask
+            }),
+            signal: controller.signal
+          });
+          const data = await res.json().catch(() => null);
+          if (!res.ok || !data || !data.success || !data.booking) {
+            const details = data && data.details ? ': ' + data.details.join('; ') : '';
+            const msg = (data && data.error ? data.error + details : 'Booking failed (' + res.status + '). Please retry.');
+            throw new Error(msg);
+          }
+          const booking = data.booking;
+          if (window.AperoBooking && typeof window.AperoBooking.onBookingSubmit === 'function') {
+            try {
+              window.AperoBooking.onBookingSubmit({
+                ticketId: booking.tier,
+                quantity: booking.quantity,
+                selectedMask: booking.mask_selected,
+                user: { ...bookingState.user },
+                booking_ref: booking.booking_ref,
+                total: booking.total
+              });
+            } catch (hookErr) {
+              console.error('onBookingSubmit hook failed:', hookErr);
+            }
+          }
           const holderEl = document.getElementById('confirmedHolderName');
           const refEl = document.getElementById('confirmedBookingRef');
           const tierEl = document.getElementById('confirmedTier');
           const maskEl = document.getElementById('confirmedMask');
-
-          if (holderEl) holderEl.textContent = bookingState.user.name || 'GUEST ATTENDEE';
-          if (refEl) refEl.textContent = randomRef;
+          if (holderEl) holderEl.textContent = booking.holder_name || 'GUEST ATTENDEE';
+          if (refEl) refEl.textContent = booking.booking_ref;
           if (tierEl) {
             tierEl.textContent = tierData.type === 'group'
               ? `${tierData.name} (${totalGuests} GUESTS)`
-              : `${tierData.name} (${bookingState.quantity}X)`;
+              : `${tierData.name} (${booking.quantity}X)`;
           }
           if (maskEl) {
             maskEl.textContent = bookingState.selectedMaskName;
           }
-
           goToStep('success');
-        }, 850);
+        } catch (err) {
+          console.error('Booking failed:', err);
+          const isTimeout = err && err.name === 'AbortError';
+          showBookingError(isTimeout
+            ? 'Request timed out. Please check your connection and retry.'
+            : (err && err.message ? err.message : 'Booking failed. Please retry.'));
+        } finally {
+          if (timeoutId) clearTimeout(timeoutId);
+          btnFinalConfirmPayment.disabled = false;
+          btnFinalConfirmPayment.innerHTML = originalText;
+        }
       });
+    }
+
+    function showBookingError(msg) {
+      let el = document.getElementById('bookingFormError');
+      if (!el && btnFinalConfirmPayment) {
+        el = document.createElement('div');
+        el.id = 'bookingFormError';
+        el.setAttribute('role', 'alert');
+        el.style.cssText = 'font-size:0.85rem;line-height:1.5;color:#ff6b6b;background:rgba(229,9,20,0.1);border:1px solid rgba(229,9,20,0.4);border-radius:4px;padding:0.8rem 1rem;margin-top:1rem;display:none;';
+        btnFinalConfirmPayment.parentElement.insertBefore(el, btnFinalConfirmPayment);
+      }
+      if (!el) return;
+      if (!msg) {
+        el.style.display = 'none';
+        el.textContent = '';
+      } else {
+        el.style.display = 'block';
+        el.textContent = msg;
+      }
     }
 
     // Auto-open modal if tier requested in URL (e.g. ?tier=early-bird or #early-bird)
