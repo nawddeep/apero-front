@@ -46,10 +46,10 @@
       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-      daysEl.textContent = String(days).padStart(3, '0');
-      hoursEl.textContent = String(hours).padStart(2, '0');
-      minsEl.textContent = String(minutes).padStart(2, '0');
-      secsEl.textContent = String(seconds).padStart(2, '0');
+      daysEl.textContent  = String(days);
+      hoursEl.textContent = String(hours);
+      minsEl.textContent  = String(minutes);
+      secsEl.textContent  = String(seconds);
     }
 
     updateTimer();

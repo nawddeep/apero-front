@@ -30,6 +30,11 @@
       return;
     }
 
+    // Disable Lenis on mobile for better native scroll performance
+    if (window.innerWidth <= 768) {
+      return;
+    }
+
     lenisInstance = new Lenis({
       duration: 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -145,15 +150,18 @@
           heroVideo.play().catch(() => {});
         }
       }
-    })
-    // Hero Entrance
+    });
+
+    // Hero Entrance — reduce filter intensity on mobile for better performance
+    const isMobileAnim = window.innerWidth <= 768;
+    tl
     .fromTo(heroVideo, {
-      scale: 1.14,
-      filter: 'contrast(120%) brightness(50%)'
+      scale: isMobileAnim ? 1.04 : 1.14,
+      filter: isMobileAnim ? 'brightness(60%)' : 'contrast(120%) brightness(50%)'
     }, {
       scale: 1.0,
-      filter: 'contrast(110%) brightness(85%)',
-      duration: 2.2,
+      filter: isMobileAnim ? 'brightness(85%)' : 'contrast(110%) brightness(85%)',
+      duration: isMobileAnim ? 1.5 : 2.2,
       ease: 'power2.out'
     }, '-=0.8')
     .from('#mainNav', {
@@ -163,9 +171,9 @@
       ease: 'power2.out'
     }, '-=1.6')
     .from('.hero-title', {
-      y: 60,
+      y: isMobileAnim ? 30 : 60,
       opacity: 0,
-      duration: 1.3,
+      duration: isMobileAnim ? 0.9 : 1.3,
       ease: 'power4.out'
     }, '-=1.2')
     .from('.hero-tagline', {
@@ -272,9 +280,9 @@
       });
     }
 
-    // --- Venue Image Parallax ---
+    // --- Venue Image Parallax (desktop only — too janky on mobile) ---
     const venueImg = document.querySelector('.venue-image');
-    if (venueImg) {
+    if (venueImg && !isMobile) {
       gsap.to(venueImg, {
         yPercent: 12,
         ease: 'none',
@@ -305,8 +313,11 @@
 
     // --- Gallery Parallax Elements ---
     const galleryItems = document.querySelectorAll('.gallery-item');
+    const isMobile = window.innerWidth <= 768;
+    
     galleryItems.forEach((item, index) => {
-      const speed = (index % 2 === 0) ? -20 : -35;
+      // Reduce parallax intensity on mobile for better performance
+      const speed = isMobile ? -10 : ((index % 2 === 0) ? -20 : -35);
       const img = item.querySelector('.gallery-img');
       if (img) {
         gsap.to(img, {
@@ -316,7 +327,7 @@
             trigger: item,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: 1
+            scrub: isMobile ? 0.5 : 1
           }
         });
       }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Apéro — Premium Nightlife & Underground Music Experience
+   Apéro — Premium Nightlife & Masked Music Experience
    Design System & Core Stylesheet
    ========================================================================== */
 
@@ -608,11 +608,11 @@ html.lenis, html.lenis body {
 }
 
 /* ==========================================================================
-   HERO SECTION (100vw × 100vh)
+   HERO SECTION (100% × 100vh)
    ========================================================================== */
 #hero {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   height: 100svh;
   display: flex;
@@ -1387,6 +1387,68 @@ html.lenis, html.lenis body {
   text-transform: uppercase;
 }
 
+/* --- Passes Announced Soon Card --- */
+.passes-soon-wrap {
+  display: flex;
+  justify-content: center;
+  padding-block: 1rem 2rem;
+}
+
+.passes-soon-card {
+  background: var(--black-elevated);
+  border: 1px solid var(--border-dim);
+  border-top: 2px solid var(--red);
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(2rem, 5vw, 5rem);
+  text-align: center;
+  max-width: 680px;
+  width: 100%;
+  position: relative;
+}
+
+.passes-soon-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.passes-soon-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+
+.passes-soon-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.88rem, 2vw, 1rem);
+  color: var(--white-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.passes-soon-rule {
+  width: 40px;
+  height: 1px;
+  background: var(--red);
+  margin-inline: auto;
+  margin-bottom: 1.75rem;
+  opacity: 0.6;
+}
+
+.passes-soon-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--gray);
+  text-transform: uppercase;
+}
+
 .tickets-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1398,6 +1460,7 @@ html.lenis, html.lenis body {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
 
 /* Luxury Pass Card */
 .ticket-card {
@@ -2085,5 +2148,853 @@ dialog#venueDirectionsModal::backdrop {
   }
   .hero-video {
     transform: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE OPTIMIZATIONS
+   Comprehensive mobile enhancements for iOS and Android devices
+   ========================================================================== */
+
+/* --- Overflow Root Fix --- */
+html {
+  overflow-x: clip; /* safer than hidden — doesn't affect positioning context */
+}
+
+/* --- Mobile Base Improvements --- */
+@media (max-width: 768px) {
+
+  /* Prevent text zoom on iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  /* Optimize body scrolling */
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Container spacing */
+  .site-container {
+    width: 92%;
+  }
+
+  /* Prevent big text from breaking layout */
+  .display-title,
+  .hero-title,
+  .venue-title,
+  .statement-headline,
+  .announcement-title,
+  .tickets-headline,
+  .final-title {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Reduce excessive vertical spacing */
+  #about,
+  #artists,
+  #venue,
+  #tickets,
+  #gallery {
+    padding-block: clamp(4rem, 10vw, 6rem);
+  }
+}
+
+/* --- Mobile Hero Optimization --- */
+@media (max-width: 768px) {
+  #hero {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
+  }
+
+  .hero-video-wrapper {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .hero-video {
+    object-fit: cover;
+    object-position: center center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-content {
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 11vw, 3.8rem);
+    line-height: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .hero-tagline {
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+    letter-spacing: 0.25em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-meta {
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .hero-meta-dot {
+    display: none;
+  }
+}
+
+/* --- Mobile Navigation --- */
+@media (max-width: 768px) {
+  #mainNav {
+    height: 64px;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  #mainNav.scrolled {
+    height: 60px;
+  }
+
+  .nav-container {
+    padding-inline: 1rem;
+  }
+
+  .nav-logo-text {
+    font-size: 1.25rem;
+  }
+
+  .nav-coords {
+    display: none !important;
+  }
+
+  .nav-actions {
+    gap: 0.4rem;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    min-height: 44px;
+  }
+
+  /* Contact link hidden on very small screens — accessible via drawer */
+  .nav-contact-link {
+    display: none;
+  }
+}
+
+/* Show contact link on slightly wider small phones */
+@media (min-width: 420px) and (max-width: 768px) {
+  .nav-contact-link {
+    display: inline-flex;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+  }
+}
+
+/* Sound toggle compact on small screens */
+@media (max-width: 480px) {
+  .sound-text {
+    display: none;
+  }
+
+  .sound-toggle {
+    padding: 0.45rem 0.6rem;
+  }
+}
+
+/* --- Sticky Mobile CTA (Bottom) --- */
+.mobile-sticky-cta {
+  display: none; /* Hidden by default — shown only in mobile media query */
+}
+
+@media (max-width: 768px) {
+  .mobile-sticky-cta {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(5, 5, 5, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-dim);
+    padding: 0.75rem 1rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    z-index: 900;
+    transform: translateY(100%);
+    transition: transform 0.35s var(--ease-cinematic);
+    pointer-events: none;
+  }
+
+  .mobile-sticky-cta.visible {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mobile-sticky-cta .btn {
+    width: 100%;
+    min-height: 52px;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+  }
+}
+
+/* --- Mobile Typography --- */
+@media (max-width: 768px) {
+  .display-title {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+    line-height: 0.95;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+  }
+
+  .statement-headline {
+    font-size: clamp(1.7rem, 7.5vw, 2.4rem);
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
+
+  .statement-sub {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
+/* --- Mobile Preloader --- */
+@media (max-width: 768px) {
+  #preloader {
+    padding: 2rem 1.5rem;
+  }
+
+  .preloader-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+  }
+
+  .preloader-logo {
+    font-size: clamp(2.5rem, 14vw, 5rem);
+    letter-spacing: 0.08em;
+  }
+
+  .preloader-tagline {
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+  }
+
+  .preloader-counter {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .preloader-bar-wrap {
+    max-width: 180px;
+  }
+}
+
+/* --- Mobile Experience Cards --- */
+@media (max-width: 768px) {
+  .experience-grid {
+    gap: 1.5rem;
+  }
+
+  .experience-card {
+    padding: 1.5rem;
+  }
+
+  .exp-num {
+    font-size: 0.8rem;
+  }
+
+  .exp-title {
+    font-size: 1rem;
+  }
+
+  .exp-desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+}
+
+/* --- Mobile Countdown --- */
+@media (max-width: 768px) {
+  .countdown-telemetry {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    text-align: center;
+  }
+
+  .countdown-telemetry span:not(.active-node) {
+    display: none;
+  }
+
+  .countdown-digits-grid {
+    gap: 0.8rem;
+  }
+
+  .countdown-box {
+    padding: 1.2rem 0.8rem;
+  }
+
+  .countdown-number {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .countdown-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+  }
+}
+
+/* 2×2 countdown grid on very small screens */
+@media (max-width: 479px) {
+  .countdown-digits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    max-width: 100%;
+  }
+
+  .countdown-number {
+    font-size: clamp(1.8rem, 9vw, 2.5rem);
+  }
+}
+
+/* --- Mobile Artists/Announcement --- */
+@media (max-width: 768px) {
+  .artists-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .announcement-title {
+    font-size: clamp(1.8rem, 9vw, 2.8rem);
+    margin-bottom: 1rem;
+  }
+
+  .announcement-subtitle {
+    font-size: clamp(0.78rem, 3vw, 0.95rem);
+    letter-spacing: 0.22em;
+  }
+
+  .announcement-tagline {
+    font-size: 0.85rem;
+  }
+}
+
+/* --- Mobile Venue --- */
+@media (max-width: 768px) {
+  .venue-grid {
+    gap: 2rem;
+  }
+
+  .venue-visual {
+    height: 260px;
+    border-radius: 2px;
+  }
+
+  .venue-image {
+    height: 100%;
+  }
+
+  .venue-title {
+    font-size: clamp(2rem, 11vw, 3.5rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .venue-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Stack venue specs in a single column on mobile */
+  .venue-specs {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .venue-spec-item {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .venue-spec-item:last-child {
+    border-bottom: none;
+  }
+
+  .spec-key {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+  }
+
+  .spec-val {
+    font-size: 0.85rem;
+  }
+}
+
+/* --- Mobile Ticket Cards --- */
+@media (max-width: 768px) {
+  .tickets-intro {
+    margin-bottom: 2.5rem;
+  }
+
+  .tickets-headline {
+    font-size: clamp(1.8rem, 9vw, 2.8rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .tickets-sub {
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+  }
+
+  .tickets-grid {
+    gap: 1.75rem;
+  }
+
+  .ticket-card {
+    padding: 1.8rem 1.5rem;
+  }
+
+  .ticket-tier-name {
+    font-size: 1.5rem;
+  }
+
+  .ticket-price {
+    font-size: 2.5rem;
+  }
+
+  .ticket-features {
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+
+  .ticket-feature-item {
+    font-size: 0.82rem;
+  }
+
+  .ticket-bottom-wrap {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ticket-bottom-wrap .btn {
+    width: 100%;
+    min-height: 52px;
+  }
+}
+
+/* Remove hover card lift effects on touch devices */
+@media (hover: none) {
+  .ticket-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border-dim);
+  }
+
+  .ticket-card.featured:hover {
+    border-color: var(--red-border);
+    box-shadow: 0 0 35px rgba(229, 9, 20, 0.15);
+  }
+
+  .btn-primary:hover,
+  .btn-outline:hover {
+    transform: none;
+  }
+}
+
+/* --- Mobile Gallery --- */
+@media (max-width: 768px) {
+  .gallery-grid {
+    gap: 0.75rem;
+  }
+
+  .gallery-item {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .gallery-item.large {
+    aspect-ratio: 16 / 9 !important;
+  }
+}
+
+/* --- Mobile Final CTA --- */
+@media (max-width: 768px) {
+  #finalCta {
+    padding-block: clamp(4rem, 12vw, 6rem);
+  }
+
+  .final-title {
+    font-size: clamp(2.2rem, 12vw, 3.8rem);
+    margin-bottom: 1rem;
+  }
+
+  .final-sub {
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+  }
+}
+
+/* --- Mobile Footer --- */
+@media (max-width: 768px) {
+  .footer-top {
+    gap: 2.5rem;
+  }
+
+  .footer-brand {
+    margin-bottom: 0;
+  }
+
+  .footer-logo {
+    font-size: 1.6rem;
+  }
+
+  .footer-tagline {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .footer-links-grid {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .footer-col-title {
+    font-size: 0.7rem;
+  }
+
+  .footer-link {
+    font-size: 0.82rem;
+  }
+
+  .footer-bottom {
+    font-size: 0.7rem;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}
+
+/* --- Mobile Booking Modal — Full Screen Sheet --- */
+@media (max-width: 768px) {
+  dialog#bookingModal {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    padding: 0;
+  }
+
+  .modal-inner {
+    height: 100%;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Allow overscroll within modal without chaining to page */
+    overscroll-behavior: contain;
+  }
+
+  .modal-header {
+    padding: 1.25rem 1.25rem 1rem;
+    flex-shrink: 0;
+    padding-top: calc(1.25rem + env(safe-area-inset-top, 0px));
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+  }
+
+  .modal-eyebrow {
+    font-size: 0.7rem;
+  }
+
+  .modal-close-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+  }
+
+  .modal-body {
+    padding: 1rem 1.25rem;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-label {
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-input,
+  .form-select {
+    padding: 0.9rem 1rem;
+    font-size: 16px !important; /* Prevent iOS auto-zoom */
+    border-radius: 4px;
+    min-height: 52px;
+  }
+
+  .qty-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+  }
+
+  .qty-display {
+    font-size: 1.2rem;
+    width: 60px;
+  }
+
+  .order-summary {
+    padding: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .summary-row {
+    font-size: 0.75rem;
+  }
+
+  .summary-row.total {
+    font-size: 1rem;
+  }
+
+  .modal-footer {
+    padding: 1rem 1.25rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    flex-shrink: 0;
+  }
+
+  /* Success view mobile */
+  .booking-success-view {
+    padding: 2rem 1.25rem;
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .success-icon-wrap {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+
+  .success-title {
+    font-size: 1.6rem;
+  }
+
+  .success-desc {
+    font-size: 0.88rem;
+  }
+
+  .pass-preview-badge {
+    padding: 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* --- Mobile Directions Modal --- */
+@media (max-width: 768px) {
+  dialog#venueDirectionsModal {
+    max-width: 96%;
+    width: 96%;
+    padding: 1.5rem;
+    margin: auto;
+    border-radius: 6px;
+  }
+
+  #directionsHeading {
+    font-size: 1.2rem;
+  }
+
+  #venueDirectionsModal p {
+    font-size: 0.82rem !important;
+    line-height: 1.65 !important;
+  }
+}
+
+/* --- Touch Target Improvements --- */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 48px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-lg {
+    min-height: 54px;
+    padding: 1rem 2rem;
+    font-size: 0.88rem;
+  }
+
+  .btn-sm {
+    min-height: 44px;
+  }
+
+  button,
+  a.btn,
+  .open-booking-btn,
+  .menu-toggle,
+  .sound-toggle {
+    min-height: 44px;
+  }
+
+  /* Hamburger larger hit area */
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* --- Disable Cursor & Pointer Effects on Touch --- */
+@media (pointer: coarse) {
+  .hero-video {
+    transform: scale(1) !important;
+  }
+
+  * {
+    cursor: default !important;
+  }
+
+  .gallery-item:hover .gallery-img {
+    transform: scale(1.06); /* Minimal — prevent jump */
+    filter: grayscale(20%) contrast(110%);
+  }
+}
+
+/* --- iOS Safe Areas --- */
+@supports (padding: env(safe-area-inset-bottom)) {
+  @media (max-width: 768px) {
+    #mainNav {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    .mobile-sticky-cta {
+      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .modal-footer {
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    #mobileDrawer {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+  }
+}
+
+/* --- Small Mobile Devices (375px and below) --- */
+@media (max-width: 375px) {
+  .hero-title {
+    font-size: 2.2rem;
+    letter-spacing: 0.03em;
+  }
+
+  .nav-logo-text {
+    font-size: 1.1rem;
+  }
+
+  .display-title {
+    font-size: 1.8rem;
+  }
+
+  .statement-headline {
+    font-size: 1.5rem;
+  }
+
+  .countdown-number {
+    font-size: 1.7rem;
+  }
+
+  .ticket-tier-name {
+    font-size: 1.3rem;
+  }
+
+  .ticket-price {
+    font-size: 2rem;
+  }
+
+  .announcement-title {
+    font-size: 1.8rem;
+  }
+
+  .tickets-headline {
+    font-size: 1.8rem;
+  }
+
+  .venue-title {
+    font-size: 2rem;
+  }
+
+  .preloader-logo {
+    font-size: 2.5rem;
+  }
+}
+
+/* --- Landscape Orientation on Mobile --- */
+@media (max-width: 768px) and (orientation: landscape) {
+  #hero {
+    min-height: 100dvh;
+  }
+
+  .hero-content {
+    padding-top: 3vh;
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+  }
+
+  dialog#bookingModal .modal-inner {
+    max-height: 100dvh;
+    overflow-y: auto;
+  }
+}
+
+/* --- Performance Optimizations for Mobile --- */
+@media (max-width: 768px) {
+  /* Avoid compositing overhead on elements that don't need it */
+  .hero-video {
+    will-change: auto;
+  }
+
+  .ticket-card,
+  .gallery-item,
+  .experience-card {
+    will-change: auto;
+  }
+
+  /* Nested reduced motion within mobile context */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

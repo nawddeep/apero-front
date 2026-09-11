@@ -71,6 +71,10 @@
 
       modal.showModal();
 
+      // Scroll modal to top on every open (important for mobile re-opens)
+      const modalInner = modal.querySelector('.modal-inner');
+      if (modalInner) modalInner.scrollTop = 0;
+
       // GSAP Entrance
       if (typeof gsap !== 'undefined') {
         gsap.fromTo(modal, {
