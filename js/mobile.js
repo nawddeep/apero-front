@@ -37,7 +37,6 @@
     function updateStickyCta() {
       const scrollY = window.scrollY;
       const heroHeight = window.innerHeight;
-      const ticketsSection = document.getElementById('tickets');
       const finalCta = document.getElementById('finalCta');
       const bookingModal = document.getElementById('bookingModal');
 
@@ -51,14 +50,7 @@
       // Show sticky CTA after scrolling past hero
       let shouldShow = scrollY > heroHeight * 0.8;
 
-      // Hide when ticket cards or final CTA are in viewport
-      if (ticketsSection) {
-        const ticketsRect = ticketsSection.getBoundingClientRect();
-        if (ticketsRect.top < window.innerHeight && ticketsRect.bottom > 0) {
-          shouldShow = false;
-        }
-      }
-
+      // Hide when final CTA section is in viewport
       if (finalCta) {
         const finalRect = finalCta.getBoundingClientRect();
         if (finalRect.top < window.innerHeight) {

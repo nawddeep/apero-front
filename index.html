@@ -62,14 +62,26 @@
       </a>
 
       <div class="nav-actions">
-        <button class="sound-toggle" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="false" title="Toggle Sound">
+        <button class="sound-toggle playing" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="true" title="Toggle Sound">
           <span class="sound-bars" aria-hidden="true">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
           </span>
-          <span class="sound-text" id="soundText">SOUND OFF</span>
+          <span class="sound-text" id="soundText">SOUND ON</span>
         </button>
+        <script>
+          (function() {
+            try {
+              if (localStorage.getItem('aperoMusicPreference') === 'off') {
+                var b = document.getElementById('soundToggle');
+                if (b) { b.classList.remove('playing'); b.setAttribute('aria-pressed', 'false'); }
+                var t = document.getElementById('soundText');
+                if (t) { t.textContent = 'SOUND OFF'; }
+              }
+            } catch (_) {}
+          })();
+        </script>
         <a href="#footer" class="nav-link nav-contact-link">CONTACT</a>
         <button class="btn btn-primary btn-sm open-booking-btn" data-tier="general" aria-label="Book Tickets">BOOK TICKET</button>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle Mobile Navigation" aria-expanded="false">
@@ -336,28 +348,6 @@
       </div>
     </section>
 
-    <!-- ==========================================================================
-         TICKET PASSES SECTION
-         ========================================================================== -->
-    <section id="tickets" aria-label="Ticket Passes">
-      <div class="site-container">
-        <div class="tickets-intro">
-          <div class="section-label">04 / ACCESS</div>
-          <h2 class="tickets-headline">PASSES</h2>
-        </div>
-
-        <div class="passes-soon-wrap">
-          <div class="passes-soon-card">
-            <div class="passes-soon-label">ANNOUNCEMENT</div>
-            <p class="passes-soon-title">ANNOUNCED SOON</p>
-            <p class="passes-soon-sub">Stay close. Passes for Apéro will be revealed shortly.<br>26 SEPTEMBER 2026 &mdash; ROAR, UDAIPUR</p>
-            <div class="passes-soon-rule"></div>
-            <p class="passes-soon-note">Follow us for updates &nbsp;&mdash;&nbsp; limited availability expected.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
 
     <!-- ==========================================================================
          GALLERY SECTION
@@ -428,7 +418,7 @@
             <a href="#artists" class="footer-link">Artists</a>
             <a href="#venue" class="footer-link">Venue</a>
             <a href="#gallery" class="footer-link">Gallery</a>
-            <a href="#tickets" class="footer-link">Tickets</a>
+
           </div>
 
           <div class="footer-col">
