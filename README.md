@@ -48,7 +48,7 @@ apero/
    - Architectural coordinate frame and modal directions terminal.
 
 4. **Live Telemetry & Countdown**:
-   - Accurate JavaScript countdown to September 26, 2026, 21:00 IST.
+   - Accurate JavaScript countdown to September 26, 2026, 6:00 PM IST.
 
 5. **Luxury Holographic Passes & Booking Modal**:
    - Perforated ticket styling with tear-off notches and barcode telemetry.

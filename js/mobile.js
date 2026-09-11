@@ -50,6 +50,15 @@
       // Show sticky CTA after scrolling past hero
       let shouldShow = scrollY > heroHeight * 0.8;
 
+      // Hide when tickets section or final CTA section is in viewport
+      const ticketsSection = document.getElementById('tickets');
+      if (ticketsSection) {
+        const ticketsRect = ticketsSection.getBoundingClientRect();
+        if (ticketsRect.top < window.innerHeight && ticketsRect.bottom > 0) {
+          shouldShow = false;
+        }
+      }
+
       // Hide when final CTA section is in viewport
       if (finalCta) {
         const finalRect = finalCta.getBoundingClientRect();

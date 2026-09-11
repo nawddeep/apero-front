@@ -1,38 +1,125 @@
 /**
  * Apéro — Ticket Booking System
- * Modal controller, live pricing calculation, form validation, and decoupled API hook
+ * Modal controller, tier configuration, live price calculations, category tabs, and booking hooks.
  */
 
 (function () {
   'use strict';
 
-  // Ticket Tier Specifications
+  // Exact Ticket Tier Specifications
   const TIERS = {
+    super_early: {
+      name: 'SUPER EARLY BIRD',
+      price: 1111,
+      perPerson: 1111,
+      people: 1,
+      isSoldOut: true,
+      type: 'single',
+      code: 'AP-SEB'
+    },
     early: {
       name: 'EARLY BIRD PASS',
-      price: 999,
+      price: 1333,
+      perPerson: 1333,
+      people: 1,
+      type: 'single',
       code: 'AP-EB'
     },
-    general: {
-      name: 'GENERAL ADMISSION',
-      price: 1499,
-      code: 'AP-GEN'
+    stage1: {
+      name: 'STAGE 1 PASS',
+      price: 1777,
+      perPerson: 1777,
+      people: 1,
+      type: 'single',
+      code: 'AP-S1'
     },
-    vip: {
-      name: 'VIP BACKSTAGE PASS',
-      price: 2999,
-      code: 'AP-VIP'
+    stage2: {
+      name: 'STAGE 2 (TBD)',
+      price: 0,
+      perPerson: 0,
+      people: 1,
+      isTbd: true,
+      type: 'single',
+      code: 'AP-S2'
+    },
+    group5: {
+      name: 'GROUP PASS (5 PEOPLE)',
+      price: 6000,
+      perPerson: 1200,
+      people: 5,
+      type: 'group',
+      code: 'AP-GRP5'
+    },
+    group8: {
+      name: 'GROUP PASS (8 PEOPLE)',
+      price: 9200,
+      perPerson: 1150,
+      people: 8,
+      type: 'group',
+      code: 'AP-GRP8'
     }
   };
 
   const GST_RATE = 0.18; // 18% GST / entertainment tax
 
-  let currentTier = 'general';
+  let currentTier = 'early';
   let currentQty = 1;
 
   document.addEventListener('DOMContentLoaded', () => {
     initBookingSystem();
+    initCategoryTabs();
+    initCardSelection();
   });
+
+  function initCategoryTabs() {
+    const tabs = document.querySelectorAll('.category-tab');
+    const sections = document.querySelectorAll('.ticket-category-section');
+    if (!tabs.length || !sections.length) return;
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        const cat = tab.getAttribute('data-category');
+
+        tabs.forEach((t) => {
+          const isActive = t === tab;
+          t.classList.toggle('active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        sections.forEach((sec) => {
+          const group = sec.getAttribute('data-category-group');
+          if (cat === 'all' || cat === group) {
+            sec.style.display = 'block';
+            if (typeof gsap !== 'undefined') {
+              gsap.fromTo(sec, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
+            }
+          } else {
+            sec.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  function initCardSelection() {
+    const cards = document.querySelectorAll('.ticket-card:not(.tbd-card):not(.sold-out-card)');
+    cards.forEach((card) => {
+      card.addEventListener('click', (e) => {
+        // If clicking inside the card but not directly on the CTA button
+        if (!e.target.closest('button')) {
+          const tier = card.getAttribute('data-tier');
+          if (tier && TIERS[tier] && !TIERS[tier].isTbd && !TIERS[tier].isSoldOut) {
+            cards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            if (typeof window.openAperoBookingModal === 'function') {
+              window.openAperoBookingModal(tier);
+            }
+          }
+        }
+      });
+    });
+  }
 
   function initBookingSystem() {
     const modal = document.getElementById('bookingModal');
@@ -52,16 +139,23 @@
     openBtns.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const tier = btn.getAttribute('data-tier') || 'general';
+        const tier = btn.getAttribute('data-tier') || 'early';
+        if (tier === 'stage2' || tier === 'super_early') return; // TBD and SOLD OUT cannot be booked
         openModal(tier);
       });
     });
 
+    window.openAperoBookingModal = openModal;
+
     function openModal(tier) {
-      if (TIERS[tier]) {
+      if (TIERS[tier] && !TIERS[tier].isTbd && !TIERS[tier].isSoldOut) {
         currentTier = tier;
         if (tierSelect) tierSelect.value = tier;
+      } else {
+        currentTier = 'early';
+        if (tierSelect) tierSelect.value = 'early';
       }
+
       currentQty = 1;
       updateCalculations();
 
@@ -71,7 +165,7 @@
 
       modal.showModal();
 
-      // Scroll modal to top on every open (important for mobile re-opens)
+      // Scroll modal to top on every open
       const modalInner = modal.querySelector('.modal-inner');
       if (modalInner) modalInner.scrollTop = 0;
 
@@ -124,11 +218,14 @@
       }
     });
 
-    // Tier selection change
+    // Tier selection change in dropdown
     if (tierSelect) {
       tierSelect.addEventListener('change', (e) => {
-        currentTier = e.target.value;
-        updateCalculations();
+        const selected = e.target.value;
+        if (TIERS[selected] && !TIERS[selected].isTbd && !TIERS[selected].isSoldOut) {
+          currentTier = selected;
+          updateCalculations();
+        }
       });
     }
 
@@ -153,7 +250,8 @@
 
     // Dynamic Calculations
     function updateCalculations() {
-      const tierData = TIERS[currentTier] || TIERS.general;
+      const tierData = TIERS[currentTier] || TIERS.early;
+      const isTbd = !!tierData.isTbd;
       const subtotal = tierData.price * currentQty;
       const tax = Math.round(subtotal * GST_RATE);
       const total = subtotal + tax;
@@ -169,10 +267,22 @@
 
       if (sumTierName) sumTierName.textContent = tierData.name;
       if (sumQtyLabel) sumQtyLabel.textContent = currentQty;
-      if (sumPriceLabel) sumPriceLabel.textContent = `₹${tierData.price.toLocaleString('en-IN')}`;
-      if (sumSubtotal) sumSubtotal.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
-      if (sumTax) sumTax.textContent = `₹${tax.toLocaleString('en-IN')}`;
-      if (sumTotal) sumTotal.textContent = `₹${total.toLocaleString('en-IN')}`;
+
+      if (isTbd) {
+        if (sumPriceLabel) sumPriceLabel.textContent = 'TBD';
+        if (sumSubtotal) sumSubtotal.textContent = 'TBD';
+        if (sumTax) sumTax.textContent = 'TBD';
+        if (sumTotal) sumTotal.textContent = 'TBD';
+      } else {
+        if (sumPriceLabel) {
+          sumPriceLabel.textContent = tierData.type === 'group'
+            ? `₹${tierData.price.toLocaleString('en-IN')} (₹${tierData.perPerson.toLocaleString('en-IN')}/person)`
+            : `₹${tierData.price.toLocaleString('en-IN')}`;
+        }
+        if (sumSubtotal) sumSubtotal.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+        if (sumTax) sumTax.textContent = `₹${tax.toLocaleString('en-IN')}`;
+        if (sumTotal) sumTotal.textContent = `₹${total.toLocaleString('en-IN')}`;
+      }
     }
 
     // Form Submission & Validation
@@ -189,21 +299,32 @@
         return;
       }
 
+      const tierData = TIERS[currentTier] || TIERS.early;
+      if (tierData.isTbd || tierData.isSoldOut) {
+        alert('This ticket tier is currently not available for reservation.');
+        return;
+      }
+
+      const totalGuests = tierData.people * currentQty;
+
       const bookingPayload = {
         name: nameInput.value.trim(),
         email: emailInput.value.trim(),
         phone: phoneInput.value.trim(),
         tier: currentTier,
-        tierName: TIERS[currentTier].name,
+        tierName: tierData.name,
+        category: tierData.type,
         quantity: currentQty,
-        unitPrice: TIERS[currentTier].price,
-        subtotal: TIERS[currentTier].price * currentQty,
-        tax: Math.round(TIERS[currentTier].price * currentQty * GST_RATE),
-        total: Math.round(TIERS[currentTier].price * currentQty * (1 + GST_RATE)),
+        totalGuests: totalGuests,
+        unitPrice: tierData.price,
+        perPersonPrice: tierData.perPerson,
+        subtotal: tierData.price * currentQty,
+        tax: Math.round(tierData.price * currentQty * GST_RATE),
+        total: Math.round(tierData.price * currentQty * (1 + GST_RATE)),
         timestamp: new Date().toISOString()
       };
 
-      // Decoupled API Callback Hook for future Payment Gateway / Backend
+      // Decoupled API Callback Hook
       if (window.AperoBooking && typeof window.AperoBooking.onBookingSubmit === 'function') {
         window.AperoBooking.onBookingSubmit(bookingPayload);
       }
@@ -211,13 +332,12 @@
       // UI Simulation: Loading state
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = 'ALLOCATING ENCRYPTED PASS...';
+      submitBtn.innerHTML = 'ALLOCATING ENCRYPTED PASSES...';
 
       setTimeout(() => {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
 
-        // Generate realistic reference
         const randomRef = `APÉRO-2026-${Math.floor(1000 + Math.random() * 9000)}`;
         const holderEl = document.getElementById('confirmedHolderName');
         const refEl = document.getElementById('confirmedBookingRef');
@@ -225,7 +345,11 @@
 
         if (holderEl) holderEl.textContent = bookingPayload.name;
         if (refEl) refEl.textContent = randomRef;
-        if (tierEl) tierEl.textContent = `${bookingPayload.tierName} (${bookingPayload.quantity}X)`;
+        if (tierEl) {
+          tierEl.textContent = tierData.type === 'group'
+            ? `${tierData.name} — ${bookingPayload.totalGuests} GUESTS`
+            : `${tierData.name} (${bookingPayload.quantity}X)`;
+        }
 
         // Transition to confirmation view
         bookingForm.style.display = 'none';
@@ -235,7 +359,7 @@
             gsap.fromTo(successView, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4 });
           }
         }
-      }, 1200);
+      }, 1100);
     });
   }
 

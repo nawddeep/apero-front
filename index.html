@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-  
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+
   <!-- Mobile Theme Colors -->
   <meta name="theme-color" content="#050505">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
+
   <title>APÉRO — After Dark | Udaipur 2026</title>
-  <meta name="description" content="APÉRO — One Night. No Limits. A masked evening of music, mystery and luxury nightlife at ROAR, Udaipur on 26 SEPTEMBER 2026.">
-  <meta name="keywords" content="Apéro, masked event, Udaipur music event, luxury nightlife, electronic music, red and black, ROAR Udaipur">
-  
+  <meta name="description"
+    content="APÉRO — One Night. No Limits. A masked evening of music, mystery and luxury nightlife at ROAR, Udaipur on 26 SEPTEMBER 2026.">
+  <meta name="keywords"
+    content="Apéro, masked event, Udaipur music event, luxury nightlife, electronic music, red and black, ROAR Udaipur">
+
   <!-- OpenGraph / Social Sharing -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="APÉRO — After Dark | Udaipur 2026">
-  <meta property="og:description" content="One Night. No Limits. A masked evening of music, mystery and luxury at ROAR, Udaipur.">
+  <meta property="og:description"
+    content="One Night. No Limits. A masked evening of music, mystery and luxury at ROAR, Udaipur.">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e50914'>A</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e50914'>A</text></svg>">
+
+  <!-- Instant Scroll Restoration to Top -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
+  </script>
 
   <!-- Core Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
   <!-- Mobile Sticky CTA (Bottom) -->
   <div class="mobile-sticky-cta" id="mobileStickyCta">
-    <button class="btn btn-primary open-booking-btn" data-tier="general">BOOK TICKET</button>
+    <a href="tickets.html" class="btn btn-primary" id="mobileStickyCtaLink">BOOK TICKET</a>
   </div>
 
   <!-- Film Grain Overlay -->
@@ -62,7 +79,8 @@
       </a>
 
       <div class="nav-actions">
-        <button class="sound-toggle" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="false" title="Toggle Sound">
+        <button class="sound-toggle" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="false"
+          title="Toggle Sound">
           <span class="sound-bars" aria-hidden="true">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -71,7 +89,7 @@
           <span class="sound-text" id="soundText">SOUND OFF</span>
         </button>
         <a href="#footer" class="nav-link nav-contact-link">CONTACT</a>
-        <button class="btn btn-primary btn-sm open-booking-btn" data-tier="general" aria-label="Book Tickets">BOOK TICKET</button>
+        <a href="tickets.html" class="btn btn-primary btn-sm" aria-label="Book Tickets">BOOK TICKET</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle Mobile Navigation" aria-expanded="false">
           <span></span>
           <span></span>
@@ -88,7 +106,7 @@
     </ul>
     <div class="mobile-drawer-footer">
       <p>26 SEPTEMBER 2026 — UDAIPUR, INDIA</p>
-      <button class="btn btn-primary btn-lg open-booking-btn" data-tier="general" style="margin-top: 1.5rem;">BOOK TICKET</button>
+      <a href="tickets.html" class="btn btn-primary btn-lg" style="margin-top: 1.5rem;">BOOK TICKET</a>
     </div>
   </div>
 
@@ -98,18 +116,8 @@
          ========================================================================== -->
     <section id="hero" aria-label="Hero Introduction">
       <div class="hero-video-wrapper">
-        <video 
-          class="hero-video" 
-          id="heroVideo"
-          src="assets/videos/1.mp4"
-          autoplay 
-          muted 
-          loop 
-          playsinline
-          webkit-playsinline
-          preload="auto"
-          aria-hidden="true"
-        >
+        <video class="hero-video" id="heroVideo" src="assets/videos/1.mp4" autoplay muted loop playsinline
+          webkit-playsinline preload="auto" aria-hidden="true">
           <source src="assets/videos/1.mp4" type="video/mp4">
           <source src="1.mp4" type="video/mp4">
           Your browser does not support HTML5 video.
@@ -137,7 +145,7 @@
           </div>
           <span class="hero-meta-dot">/</span>
           <div class="hero-meta-item">
-            <span>21:00 — 06:00</span>
+            <span>6:00 PM – 12:00 AM</span>
           </div>
         </div>
       </div>
@@ -150,7 +158,7 @@
       <div class="site-container">
         <div class="statement-wrap">
           <div class="section-label">01 / PHILOSOPHY</div>
-          
+
           <h2 class="statement-headline" id="statementHeadline">
             <span class="reveal-word">THIS</span>
             <span class="reveal-word">IS</span>
@@ -172,22 +180,31 @@
           </h2>
 
           <p class="statement-sub">
-            Conceived at the intersection of avant-garde electronic music and high-fashion nocturnal culture, Apéro transforms the heritage architecture of Udaipur into an evening of unrestrained sound, mystery, and collective celebration. Curated strictly for those who find solace after dark.
+            Conceived at the intersection of avant-garde electronic music and high-fashion nocturnal culture, Apéro
+            transforms the heritage architecture of Udaipur into an evening of unrestrained sound, mystery, and
+            collective celebration. Curated strictly for those who find solace after dark.
           </p>
         </div>
 
         <!-- Masked Event Concept -->
         <div class="experience-grid" style="margin-top: 0;">
-          <div class="experience-card" style="grid-column: 1 / -1; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+          <div class="experience-card"
+            style="grid-column: 1 / -1; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px;">
-              <div class="exp-num" style="color: var(--red); font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 0.5rem;">CONCEPT</div>
+              <div class="exp-num"
+                style="color: var(--red); font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 0.5rem;">CONCEPT
+              </div>
               <h3 class="exp-title" style="font-size: clamp(1.2rem, 3vw, 1.8rem);">A MASKED EVENT</h3>
-              <p class="exp-desc" style="color: var(--white-muted); margin-top: 0.6rem; max-width: 480px;">An evening of mystery, music, and celebration. Masks are an embrace of the spirit — never a requirement.</p>
+              <p class="exp-desc" style="color: var(--white-muted); margin-top: 0.6rem; max-width: 480px;">An evening of
+                mystery, music, and celebration. Masks are an embrace of the spirit — never a requirement.</p>
             </div>
             <div style="flex: 1; min-width: 200px;">
-              <div class="exp-num" style="color: var(--red); font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 0.5rem;">ATTIRE</div>
+              <div class="exp-num"
+                style="color: var(--red); font-size: 0.75rem; letter-spacing: 0.3em; margin-bottom: 0.5rem;">ATTIRE
+              </div>
               <h3 class="exp-title" style="font-size: clamp(1.2rem, 3vw, 1.8rem);">RED &amp; BLACK</h3>
-              <p class="exp-desc" style="color: var(--white-muted); margin-top: 0.6rem;">Dress code: Red &amp; Black. Wear the night.</p>
+              <p class="exp-desc" style="color: var(--white-muted); margin-top: 0.6rem;">Dress code: Red &amp; Black.
+                Wear the night.</p>
             </div>
           </div>
         </div>
@@ -205,7 +222,7 @@
           <span>•</span>
           <span class="active-node">SYSTEM: ONLINE</span>
           <span>•</span>
-          <span>CAPACITY: 1,800 TICKETS</span>
+          <span>CAPACITY: 300 TICKETS</span>
         </div>
 
         <div class="countdown-digits-grid">
@@ -239,7 +256,8 @@
             <div class="section-label">02 / CURATION</div>
             <h2 class="display-title" style="font-size: clamp(2.8rem, 6vw, 5rem);">ARTISTS</h2>
           </div>
-          <p style="font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.2em; color: var(--gray); text-transform: uppercase;">
+          <p
+            style="font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.2em; color: var(--gray); text-transform: uppercase;">
             HEADLINERS &amp; SOUND DESIGNERS
           </p>
         </div>
@@ -261,7 +279,8 @@
       <div class="site-container">
         <div class="venue-grid">
           <div class="venue-visual">
-            <img src="assets/images/vanue/gallery /venue1.jpeg" alt="ROAR Udaipur venue" class="venue-image" loading="lazy" decoding="async">
+            <img src="assets/images/vanue/gallery /venue1.jpeg" alt="ROAR Udaipur venue" class="venue-image"
+              loading="lazy" decoding="async">
             <div class="venue-overlay-gradient"></div>
             <div class="venue-badge-pill">
               <span style="color: var(--red);">■</span> ROAR, UDAIPUR
@@ -278,7 +297,7 @@
             <div class="venue-specs">
               <div class="venue-spec-item">
                 <span class="spec-key">DATE &amp; TIME</span>
-                <span class="spec-val">26 SEPTEMBER 2026 // 21:00 — 06:00</span>
+                <span class="spec-val">26 SEPTEMBER 2026 // 6:00 PM – 12:00 AM</span>
               </div>
               <div class="venue-spec-item">
                 <span class="spec-key">LOCATION</span>
@@ -302,34 +321,38 @@
       </div>
     </section>
 
-
     <!-- ==========================================================================
          GALLERY SECTION
          ========================================================================== -->
     <section id="gallery" aria-label="Event Gallery">
       <div class="site-container">
-        <div class="section-label">05 / ATMOSPHERE</div>
+        <div class="section-label">04 / ATMOSPHERE</div>
         <h2 class="display-title" style="font-size: clamp(2.8rem, 6vw, 5rem); margin-bottom: 3rem;">GALLERY</h2>
-        
+
         <div class="gallery-grid">
           <div class="gallery-item wide">
-            <img src="assets/images/vanue/gallery /venue2.jpeg" alt="ROAR Udaipur venue interior" class="gallery-img" loading="lazy" decoding="async">
+            <img src="assets/images/vanue/gallery /venue2.jpeg" alt="ROAR Udaipur venue interior" class="gallery-img"
+              loading="lazy" decoding="async">
           </div>
-          
+
           <div class="gallery-item tall">
-            <img src="assets/images/vanue/gallery /venue3.jpeg" alt="ROAR Udaipur venue atmosphere" class="gallery-img" loading="lazy" decoding="async">
+            <img src="assets/images/vanue/gallery /venue3.jpeg" alt="ROAR Udaipur venue atmosphere" class="gallery-img"
+              loading="lazy" decoding="async">
           </div>
-          
+
           <div class="gallery-item large">
-            <img src="assets/images/vanue/gallery /gallery.jpeg" alt="Apéro event atmosphere" class="gallery-img" loading="lazy" decoding="async">
+            <img src="assets/images/vanue/gallery /gallery.jpeg" alt="Apéro event atmosphere" class="gallery-img"
+              loading="lazy" decoding="async">
           </div>
-          
+
           <div class="gallery-item tall">
-            <img src="assets/images/vanue/gallery /gallery2.jpeg" alt="Event venue details" class="gallery-img" loading="lazy" decoding="async">
+            <img src="assets/images/vanue/gallery /gallery2.jpeg" alt="Event venue details" class="gallery-img"
+              loading="lazy" decoding="async">
           </div>
-          
+
           <div class="gallery-item wide">
-            <img src="assets/images/vanue/gallery /venue1.jpeg" alt="ROAR Udaipur exterior" class="gallery-img" loading="lazy" decoding="async">
+            <img src="assets/images/vanue/gallery /venue1.jpeg" alt="ROAR Udaipur exterior" class="gallery-img"
+              loading="lazy" decoding="async">
           </div>
         </div>
       </div>
@@ -346,8 +369,8 @@
           SEE YOU<br>
           <span class="text-accent-red">AFTER DARK.</span>
         </h2>
-        <p class="final-sub">26 SEPTEMBER 2026 // ROAR, UDAIPUR // RED &amp; BLACK</p>
-        <button class="btn btn-primary btn-lg open-booking-btn" data-tier="general">GET YOUR TICKET</button>
+        <p class="final-sub">26 SEPTEMBER 2026 // ROAR, UDAIPUR // 6:00 PM – 12:00 AM</p>
+        <a href="tickets.html" class="btn btn-primary btn-lg">GET YOUR TICKET</a>
       </div>
     </section>
   </main>
@@ -361,7 +384,8 @@
         <div class="footer-brand">
           <a href="#hero" class="footer-logo">APÉRO</a>
           <p class="footer-tagline">
-            An uncompromising nocturnal gathering dedicated to forward-thinking electronic soundscapes, mystery, and the art of collective celebration.
+            An uncompromising nocturnal gathering dedicated to forward-thinking electronic soundscapes, mystery, and the
+            art of collective celebration.
           </p>
         </div>
 
@@ -371,16 +395,17 @@
             <a href="#about" class="footer-link">Experience</a>
             <a href="#artists" class="footer-link">Artists</a>
             <a href="#venue" class="footer-link">Venue</a>
+            <a href="tickets.html" class="footer-link">Tickets</a>
             <a href="#gallery" class="footer-link">Gallery</a>
-
           </div>
 
           <div class="footer-col">
             <span class="footer-col-title">DISPATCHES</span>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-link">Instagram</a>
             <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="footer-link">Spotify</a>
-            <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer" class="footer-link">Soundcloud</a>
-            <a href="mailto:access@apero.club" class="footer-link">Contact</a>
+            <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer"
+              class="footer-link">Soundcloud</a>
+            <a href="mailto:aperonightparty@gmail.com" class="footer-link">aperonightparty@gmail.com</a>
           </div>
 
           <div class="footer-col">
@@ -400,122 +425,23 @@
   </footer>
 
   <!-- ==========================================================================
-       TICKET BOOKING MODAL (<dialog>)
-       ========================================================================== -->
-  <dialog id="bookingModal" aria-labelledby="modalHeading">
-    <div class="modal-inner">
-      <div class="modal-header">
-        <div class="modal-title-wrap">
-          <span class="modal-eyebrow">RESERVATION TERMINAL</span>
-          <h3 class="modal-title" id="modalHeading">SECURE PASS</h3>
-        </div>
-        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Reservation Window">&times;</button>
-      </div>
-
-      <!-- Step 1: Form -->
-      <form id="bookingForm" class="modal-body" method="dialog">
-        <div class="form-group">
-          <label for="bookName" class="form-label">Full Name</label>
-          <input type="text" id="bookName" class="form-input" placeholder="e.g. Aryan Malhotra" required autocomplete="name" inputmode="text">
-        </div>
-
-        <div class="form-group">
-          <label for="bookEmail" class="form-label">Email Address (For RFID Pass Delivery)</label>
-          <input type="email" id="bookEmail" class="form-input" placeholder="e.g. aryan@apero.club" required autocomplete="email" inputmode="email">
-        </div>
-
-        <div class="form-group">
-          <label for="bookPhone" class="form-label">Phone Number (+91)</label>
-          <input type="tel" id="bookPhone" class="form-input" placeholder="e.g. 9876543210" required autocomplete="tel" inputmode="tel">
-        </div>
-
-        <div class="form-group">
-          <label for="bookTier" class="form-label">Pass Tier</label>
-          <select id="bookTier" class="form-select" disabled>
-            <option value="general" data-price="0">PASSES — ANNOUNCED SOON</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Quantity (Max 10 per order)</label>
-          <div class="quantity-control">
-            <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">&minus;</button>
-            <span class="qty-display" id="qtyDisplay">1</span>
-            <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">&#43;</button>
-          </div>
-        </div>
-
-        <!-- Dynamic Live Order Summary -->
-        <div class="order-summary">
-          <div class="summary-row">
-            <span>Pass Type</span>
-            <span id="sumTierName">GENERAL ADMISSION</span>
-          </div>
-          <div class="summary-row">
-            <span>Subtotal (<span id="sumQtyLabel">1</span> &times; <span id="sumPriceLabel">TBA</span>)</span>
-            <span id="sumSubtotal">TBA</span>
-          </div>
-          <div class="summary-row">
-            <span>GST &amp; Entertainment Levy (18%)</span>
-            <span id="sumTax">₹270</span>
-          </div>
-          <div class="summary-row total">
-            <span>Total Payable</span>
-            <span class="total-price" id="sumTotal">₹1,769</span>
-          </div>
-        </div>
-
-        <div class="modal-footer" style="padding: 0; margin-top: 1rem;">
-          <button type="submit" class="btn btn-primary btn-lg" id="submitBookingBtn" style="width: 100%;">
-            CONTINUE TO BOOKING
-          </button>
-          <p style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--gray); text-align: center; letter-spacing: 0.15em;">
-            ENCRYPTED 256-BIT RESERVATION &bull; NO REFUNDS AFTER SEP 15
-          </p>
-        </div>
-      </form>
-
-      <!-- Step 2: Instant Confirmation Voucher View -->
-      <div class="booking-success-view" id="bookingSuccessView">
-        <div class="success-icon-wrap">&check;</div>
-        <h3 class="success-title">RESERVATION CONFIRMED</h3>
-        <p class="success-desc">
-          Your RFID access pass has been reserved under <strong id="confirmedHolderName" style="color: var(--white);"></strong>. A confirmation dispatch has been sent to your email.
-        </p>
-
-        <div class="pass-preview-badge">
-          <div>
-            <div style="color: var(--gray); font-size: 0.7rem; margin-bottom: 0.2rem;">REFERENCE ID</div>
-            <div id="confirmedBookingRef" style="color: var(--red); font-weight: 700; letter-spacing: 0.1em;">APÉRO-2026-9842</div>
-          </div>
-          <div style="text-align: right;">
-            <div style="color: var(--gray); font-size: 0.7rem; margin-bottom: 0.2rem;">PASS TIER</div>
-            <div id="confirmedTier" style="font-weight: 700;">GENERAL</div>
-          </div>
-        </div>
-
-        <button type="button" class="btn btn-outline btn-lg" id="btnFinishBooking" style="width: 100%;">
-          CLOSE TERMINAL
-        </button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- ==========================================================================
        VENUE DIRECTIONS MODAL (<dialog>)
        ========================================================================= -->
   <dialog id="venueDirectionsModal" aria-labelledby="directionsHeading">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-      <h3 id="directionsHeading" style="font-family: var(--font-display); font-size: 1.6rem; text-transform: uppercase;">VENUE LOCATION</h3>
+      <h3 id="directionsHeading"
+        style="font-family: var(--font-display); font-size: 1.6rem; text-transform: uppercase;">VENUE LOCATION</h3>
       <button class="modal-close-btn" id="closeDirectionsBtn">&times;</button>
     </div>
-    <div style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; color: var(--white-muted); margin-bottom: 2rem;">
+    <div
+      style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; color: var(--white-muted); margin-bottom: 2rem;">
       <p><strong style="color: var(--white);">VENUE:</strong> ROAR</p>
       <p><strong style="color: var(--white);">LOCATION:</strong> Udaipur, India</p>
       <p><strong style="color: var(--white);">DATE:</strong> 26 September 2026</p>
-      <p><strong style="color: var(--white);">TIME:</strong> 21:00 — 06:00</p>
+      <p><strong style="color: var(--white);">TIME:</strong> 6:00 PM – 12:00 AM</p>
     </div>
-    <a href="https://maps.app.goo.gl/7ngaotbcw8hsgATZ9" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%;">
+    <a href="https://maps.app.goo.gl/7ngaotbcw8hsgATZ9" target="_blank" rel="noopener noreferrer"
+      class="btn btn-primary" style="width: 100%;">
       OPEN IN GOOGLE MAPS
     </a>
   </dialog>
@@ -532,4 +458,5 @@
   <script src="js/booking.js"></script>
   <script src="js/mobile.js"></script>
 </body>
+
 </html>

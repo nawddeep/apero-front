@@ -6,8 +6,34 @@
 (function () {
   'use strict';
 
+  // Reliable Scroll Restoration Fix: Ensure page unconditionally starts at top (0, 0)
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  if (!window.location.hash) {
+    window.scrollTo(0, 0);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+    }
+  });
+
+  window.addEventListener('beforeunload', () => {
+    if (!window.location.hash && 'scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  });
+
   // Wait for window load to ensure assets & libraries are ready
   window.addEventListener('load', () => {
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
     initLenis();
     initPreloaderAndHero();
     initScrollAnimations();
@@ -46,9 +72,20 @@
       infinite: false
     });
 
+    window.lenisInstance = lenisInstance;
+
+    // Prevent Lenis from preserving unexpected previous scroll position at bottom
+    if (!window.location.hash) {
+      lenisInstance.scrollTo(0, { immediate: true });
+    }
+
     // Synchronize Lenis with GSAP ScrollTrigger
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
+
+      if (typeof ScrollTrigger.clearScrollMemory === 'function') {
+        ScrollTrigger.clearScrollMemory('manual');
+      }
 
       lenisInstance.on('scroll', ScrollTrigger.update);
 
@@ -143,6 +180,13 @@
       },
       onComplete: () => {
         if (preloader) preloader.style.display = 'none';
+        if (!window.location.hash) {
+          if (lenisInstance) {
+            lenisInstance.scrollTo(0, { immediate: true });
+          } else {
+            window.scrollTo(0, 0);
+          }
+        }
         if (typeof window.startHeroVideo === 'function') {
           window.startHeroVideo();
         } else if (heroVideo) {
