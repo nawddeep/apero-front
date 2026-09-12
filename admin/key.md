@@ -1,0 +1,2 @@
+Url:https://ijgfebtxleogmmeejkpe.supabase.co
+Supabase key: sb_publishable_3oV3l3tigsDaxY7m0wrwIA_Pd6ItU8a

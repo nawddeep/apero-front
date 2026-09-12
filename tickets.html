@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-  
+
   <!-- Mobile Theme Colors -->
   <meta name="theme-color" content="#050505">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
-  <title>Tickets &amp; Access Passes | APÉRO — Udaipur 2026</title>
-  <meta name="description" content="Official Ticket Selection Terminal for APÉRO on 26 SEPTEMBER 2026 at ROAR, Udaipur. Single Entry and Group Entry comparison with direct per-person savings.">
-  <meta name="keywords" content="Apéro tickets, Apéro pass, Udaipur music tickets, ROAR Udaipur passes, early bird tickets">
-  
+
+  <title>Tickets &amp; Access Passes | APÉRO — Event Ticketing</title>
+  <meta name="description" content="Official Ticket Selection Terminal for APÉRO. Single Entry and Group Entry comparison with direct per-person savings.">
+  <meta name="keywords" content="Apéro tickets, Apéro pass, Udaipur music tickets, early bird tickets, event tickets">
+
   <!-- OpenGraph / Social Sharing -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Tickets &amp; Access Passes | APÉRO — Udaipur 2026">
-  <meta property="og:description" content="Secure your official pass for APÉRO on 26 September 2026 at ROAR, Udaipur. 6:00 PM – 12:00 AM.">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:title" content="Tickets &amp; Access Passes | APÉRO">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e50914'>A</text></svg>">
 
@@ -54,7 +52,10 @@
         </a>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button type="button" class="btn btn-outline btn-sm my-access-btn" id="myAccessBtn" style="min-width: 0; padding: 0.55rem 0.9rem;">
+          MY ACCESS
+        </button>
         <button class="sound-toggle" id="soundToggle" aria-label="Toggle Background Music" aria-pressed="false" title="Toggle Sound">
           <span class="sound-bars" aria-hidden="true">
             <span class="bar"></span>
@@ -71,20 +72,23 @@
     <!-- Tickets Section -->
     <section id="tickets" aria-label="Ticket Passes and Pricing" style="padding-top: 2rem;">
       <div class="site-container">
-        
+
         <!-- Intro Header -->
         <div class="tickets-page-intro">
           <div class="section-label">OFFICIAL ACCESS TERMINAL</div>
           <h1 class="tickets-headline" style="font-size: clamp(2.4rem, 6vw, 4.4rem); margin-bottom: 0.8rem;">BUY TICKETS</h1>
           <p class="tickets-sub">DIRECT PRICE COMPARISON &bull; INDIVIDUAL &bull; GROUP PASSES &bull; STRICTLY 21+</p>
-          
-          <div class="tickets-event-pill">
-            <span>26 SEPTEMBER 2026</span>
+
+          <div class="tickets-event-pill" id="ticketsEventPill" data-loading="1">
+            <span id="evtDate">LOADING EVENT…</span>
             <span>&bull;</span>
-            <span>ROAR, UDAIPUR</span>
+            <span id="evtVenue">—</span>
             <span>&bull;</span>
-            <span>6:00 PM – 12:00 AM</span>
+            <span id="evtTime">—</span>
           </div>
+
+          <!-- Event selector (hidden when only one published event exists) -->
+          <div class="event-selector" id="eventSelector" style="display:none;" role="tablist" aria-label="Choose event"></div>
 
           <!-- Category Filter Tabs -->
           <div class="tickets-category-tabs" role="tablist" aria-label="Ticket Categories">
@@ -97,186 +101,20 @@
           </div>
         </div>
 
+        <div id="catalogError" role="alert" style="display:none; margin-block: 1.5rem; padding: 1rem 1.2rem; border: 1px solid var(--red-border); background: var(--red-subtle); color: var(--white-muted); font-family: var(--font-mono); font-size: 0.85rem;"></div>
+
         <!-- Category 1: SINGLE ENTRY -->
-        <div class="ticket-category-section" data-category-group="single">
+        <div class="ticket-category-section" data-category-group="single" id="categorySingle">
           <div class="category-header">
             <div class="category-title-wrap">
               <span class="category-eyebrow">CATEGORY 01</span>
               <h2 class="category-title">SINGLE ENTRY</h2>
             </div>
-            <div class="category-meta">1 PERSON PER PASS &bull; RFID ACCESS &bull; STRICTLY 21+</div>
+            <div class="category-meta">1 PERSON PER PASS &bull; INDIVIDUAL TICKET CODES &bull; STRICTLY 21+</div>
           </div>
 
           <div class="tickets-scroll-wrapper">
-            <div class="tickets-track single-track" id="singleTrack">
-              <!-- Super Early Bird -->
-              <div class="ticket-card dimmed sold-out-card" data-tier="super_early">
-                <div class="ticket-card-header">
-                  <span class="ticket-category-tag">SINGLE ENTRY</span>
-                  <div class="ticket-tier-badge muted">SOLD OUT</div>
-                  <h3 class="ticket-tier-name">SUPER EARLY BIRD</h3>
-                  
-                  <div class="ticket-price-container">
-                    <div class="ticket-per-person">
-                      <span class="currency">₹</span>
-                      <span class="price-val">1,111</span>
-                      <span class="per-unit">/ PERSON</span>
-                    </div>
-                    <div class="ticket-sold-out-tag">SOLD OUT</div>
-                    <div class="ticket-total-calc">TOTAL: ₹1,111 &bull; 1 GUEST</div>
-                  </div>
-
-                  <div class="ticket-common-info">
-                    <div class="common-info-item timing">6:00 PM – 12:00 AM</div>
-                    <div class="common-info-item cover-charge">₹1,000 COVER CHARGE</div>
-                    <div class="common-info-item masks">MASKS</div>
-                  </div>
-                </div>
-
-                <ul class="ticket-features">
-                  <li class="ticket-feature-item">Full Night Festival Access</li>
-                  <li class="ticket-feature-item">Custom RFID Wristband Entry</li>
-                  <li class="ticket-feature-item">Single Individual Entry</li>
-                </ul>
-
-                <div class="ticket-bottom-wrap">
-                  <div class="ticket-perforation"></div>
-                  <div class="ticket-barcode">
-                    <span class="barcode-stripes" aria-hidden="true"></span>
-                    <span>AP-SEB-01</span>
-                  </div>
-                  <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.45; cursor: not-allowed; width: 100%; pointer-events: none;">
-                    SOLD OUT
-                  </button>
-                </div>
-              </div>
-
-              <!-- Early Bird (FEATURED / IN FOCUS) -->
-              <div class="ticket-card featured" data-tier="early-bird">
-                <div class="featured-glow-pill">FEATURED PLAN</div>
-                <div class="ticket-card-header">
-                  <span class="ticket-category-tag accent">SINGLE ENTRY</span>
-                  <div class="ticket-tier-badge">IN FOCUS &bull; ACTIVE</div>
-                  <h3 class="ticket-tier-name">EARLY BIRD</h3>
-                  
-                  <div class="ticket-price-container">
-                    <div class="ticket-per-person highlight">
-                      <span class="currency">₹</span>
-                      <span class="price-val">1,333</span>
-                      <span class="per-unit">/ PERSON</span>
-                    </div>
-                    <div class="ticket-total-calc">TOTAL: ₹1,333 &bull; 1 GUEST</div>
-                  </div>
-
-                  <div class="ticket-common-info">
-                    <div class="common-info-item timing">6:00 PM – 12:00 AM</div>
-                    <div class="common-info-item cover-charge">₹1,000 COVER CHARGE</div>
-                    <div class="common-info-item masks">MASKS</div>
-                  </div>
-                </div>
-
-                <ul class="ticket-features">
-                  <li class="ticket-feature-item">Full Night Festival Access</li>
-                  <li class="ticket-feature-item">Custom RFID Wristband Entry</li>
-                  <li class="ticket-feature-item">Access to Red &amp; Black Mainstage Floor</li>
-                  <li class="ticket-feature-item">Welcome Signature Cocktail on Arrival</li>
-                </ul>
-
-                <div class="ticket-bottom-wrap">
-                  <div class="ticket-perforation"></div>
-                  <div class="ticket-barcode">
-                    <span class="barcode-stripes" aria-hidden="true"></span>
-                    <span>AP-EB-26</span>
-                  </div>
-                  <button type="button" class="btn btn-primary btn-sm open-booking-btn" data-tier="early-bird" style="width: 100%;">
-                    BUY TICKET &bull; ₹1,333
-                  </button>
-                </div>
-              </div>
-
-              <!-- Stage 1 -->
-              <div class="ticket-card" data-tier="stage1">
-                <div class="ticket-card-header">
-                  <span class="ticket-category-tag">SINGLE ENTRY</span>
-                  <div class="ticket-tier-badge">NEXT PHASE</div>
-                  <h3 class="ticket-tier-name">STAGE 1</h3>
-                  
-                  <div class="ticket-price-container">
-                    <div class="ticket-per-person">
-                      <span class="currency">₹</span>
-                      <span class="price-val">1,777</span>
-                      <span class="per-unit">/ PERSON</span>
-                    </div>
-                    <div class="ticket-total-calc">TOTAL: ₹1,777 &bull; 1 GUEST</div>
-                  </div>
-
-                  <div class="ticket-common-info">
-                    <div class="common-info-item timing">6:00 PM – 12:00 AM</div>
-                    <div class="common-info-item cover-charge">₹1,000 COVER CHARGE</div>
-                    <div class="common-info-item masks">MASKS</div>
-                  </div>
-                </div>
-
-                <ul class="ticket-features">
-                  <li class="ticket-feature-item">Full Night Festival Access</li>
-                  <li class="ticket-feature-item">Custom RFID Wristband Entry</li>
-                  <li class="ticket-feature-item">Access to Red &amp; Black Mainstage Floor</li>
-                  <li class="ticket-feature-item">Express Door Allocation</li>
-                </ul>
-
-                <div class="ticket-bottom-wrap">
-                  <div class="ticket-perforation"></div>
-                  <div class="ticket-barcode">
-                    <span class="barcode-stripes" aria-hidden="true"></span>
-                    <span>AP-S1-04</span>
-                  </div>
-                  <button type="button" class="btn btn-outline btn-sm open-booking-btn" data-tier="stage1" style="width: 100%;">
-                    BUY TICKET &bull; ₹1,777
-                  </button>
-                </div>
-              </div>
-
-              <!-- Stage 2 (TBD / COMING SOON) -->
-              <div class="ticket-card tbd-card" data-tier="stage2">
-                <div class="ticket-card-header">
-                  <span class="ticket-category-tag">SINGLE ENTRY</span>
-                  <div class="ticket-tier-badge muted">COMING SOON</div>
-                  <h3 class="ticket-tier-name">STAGE 2</h3>
-                  
-                  <div class="ticket-price-container">
-                    <div class="ticket-per-person tbd-val">
-                      <span class="price-val">TBD</span>
-                      <span class="per-unit">/ PERSON</span>
-                    </div>
-                    <div class="ticket-total-calc">PRICE ANNOUNCEMENT SOON</div>
-                  </div>
-
-                  <div class="ticket-common-info">
-                    <div class="common-info-item timing">6:00 PM – 12:00 AM</div>
-                    <div class="common-info-item cover-charge">₹1,000 COVER CHARGE</div>
-                    <div class="common-info-item masks">MASKS</div>
-                  </div>
-                </div>
-
-                <ul class="ticket-features">
-                  <li class="ticket-feature-item">Full Night Festival Access</li>
-                  <li class="ticket-feature-item">Final Phase Release Allocation</li>
-                  <li class="ticket-feature-item">Strictly Subject to Venue Capacity</li>
-                </ul>
-
-                <div class="ticket-bottom-wrap">
-                  <div class="ticket-perforation"></div>
-                  <div class="ticket-barcode">
-                    <span class="barcode-stripes" aria-hidden="true"></span>
-                    <span>AP-S2-TBD</span>
-                  </div>
-                  <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">
-                    COMING SOON
-                  </button>
-                </div>
-              </div>
-            </div>
-            <!-- Swipe indicator for mobile -->
+            <div class="tickets-track single-track" id="singleTrack"></div>
             <div class="track-swipe-hint" aria-hidden="true">
               <span>SWIPE TO COMPARE PLANS &rarr;</span>
             </div>
@@ -284,122 +122,20 @@
         </div>
 
         <!-- Category 2: GROUP ENTRY -->
-        <div class="ticket-category-section" data-category-group="group" style="margin-top: 4rem;">
+        <div class="ticket-category-section" data-category-group="group" id="categoryGroup" style="margin-top: 4rem;">
           <div class="category-header">
             <div class="category-title-wrap">
               <span class="category-eyebrow accent">CATEGORY 02 &bull; RECOMMENDED VALUE</span>
               <h2 class="category-title">GROUP ENTRY</h2>
             </div>
             <div class="category-meta">
-              <span class="savings-pill">&darr; SAVE UP TO ₹183 / PERSON</span>
-              <span>SHARED PACK &bull; INDIVIDUAL PASSES &bull; ONE ORDER</span>
+              <span class="savings-pill">&darr; ONE ORDER &bull; MULTIPLE INDIVIDUAL PASSES</span>
+              <span>GROUP TICKET &bull; INDIVIDUAL CODES &bull; ONE CHECKOUT</span>
             </div>
           </div>
 
           <div class="tickets-scroll-wrapper">
-            <div class="tickets-track group-track" id="groupTrack">
-              <!-- Group of 5 -->
-              <div class="ticket-card group-card" data-tier="group5">
-                <div class="group-value-banner">
-                  <span>SAVE ₹133 / PERSON VS EARLY BIRD</span>
-                </div>
-                <div class="ticket-card-header">
-                  <span class="ticket-category-tag group-tag">GROUP ENTRY &bull; 5 PEOPLE</span>
-                  <div class="ticket-tier-badge accent">BEST FOR CREWS</div>
-                  <h3 class="ticket-tier-name">GROUP OF 5</h3>
-                  
-                  <div class="ticket-price-container">
-                    <div class="ticket-per-person highlight">
-                      <span class="currency">₹</span>
-                      <span class="price-val">1,200</span>
-                      <span class="per-unit">/ PERSON</span>
-                    </div>
-                    <div class="ticket-total-calc group-calc">
-                      <strong class="total-bold">₹6,000 TOTAL</strong>
-                      <span class="calc-divider">&bull;</span>
-                      <span>5 PEOPLE</span>
-                      <span class="calc-formula">(₹6,000 &divide; 5 = ₹1,200/PERSON)</span>
-                    </div>
-                  </div>
-
-                  <div class="ticket-common-info">
-                    <div class="common-info-item timing">6:00 PM – 12:00 AM</div>
-                    <div class="common-info-item cover-charge">₹1,000 COVER CHARGE</div>
-                    <div class="common-info-item masks">MASKS</div>
-                  </div>
-                </div>
-
-                <ul class="ticket-features">
-                  <li class="ticket-feature-item"><strong>5 Separate RFID Passes</strong> for all 5 guests</li>
-                  <li class="ticket-feature-item">Full Night Festival Access</li>
-                  <li class="ticket-feature-item">Lower Effective Cost: <strong>₹1,200 vs ₹1,333</strong></li>
-                  <li class="ticket-feature-item">Dedicated Group Express Door Lane</li>
-                </ul>
-
-                <div class="ticket-bottom-wrap">
-                  <div class="ticket-perforation"></div>
-                  <div class="ticket-barcode">
-                    <span class="barcode-stripes" aria-hidden="true"></span>
-                    <span>AP-GRP-05</span>
-                  </div>
-                  <button type="button" class="btn btn-primary btn-sm open-booking-btn" data-tier="group5" style="width: 100%;">
-                    BUY GROUP PASS &bull; ₹6,000
-                  </button>
-                </div>
-              </div>
-
-              <!-- Group of 8 -->
-              <div class="ticket-card group-card featured" data-tier="group8">
-                <div class="group-value-banner best">
-                  <span>BEST VALUE &bull; SAVE ₹183 / PERSON VS EARLY BIRD</span>
-                </div>
-                <div class="ticket-card-header">
-                  <span class="ticket-category-tag group-tag accent">GROUP ENTRY &bull; 8 PEOPLE</span>
-                  <div class="ticket-tier-badge accent">MAXIMUM SAVINGS</div>
-                  <h3 class="ticket-tier-name">GROUP OF 8</h3>
-                  
-                  <div class="ticket-price-container">
-                    <div class="ticket-per-person highlight-max">
-                      <span class="currency">₹</span>
-                      <span class="price-val">1,150</span>
-                      <span class="per-unit">/ PERSON</span>
-                    </div>
-                    <div class="ticket-total-calc group-calc">
-                      <strong class="total-bold">₹9,200 TOTAL</strong>
-                      <span class="calc-divider">&bull;</span>
-                      <span>8 PEOPLE</span>
-                      <span class="calc-formula">(₹9,200 &divide; 8 = ₹1,150/PERSON)</span>
-                    </div>
-                  </div>
-
-                  <div class="ticket-common-info">
-                    <div class="common-info-item timing">6:00 PM – 12:00 AM</div>
-                    <div class="common-info-item cover-charge">₹1,000 COVER CHARGE</div>
-                    <div class="common-info-item masks">MASKS</div>
-                  </div>
-                </div>
-
-                <ul class="ticket-features">
-                  <li class="ticket-feature-item"><strong>8 Separate RFID Passes</strong> for all 8 guests</li>
-                  <li class="ticket-feature-item">Full Night Festival Access</li>
-                  <li class="ticket-feature-item">Lowest Rate of the Night: <strong>₹1,150 / person</strong></li>
-                  <li class="ticket-feature-item">Dedicated Group Express Door Lane</li>
-                  <li class="ticket-feature-item">Complimentary Reserved Group High-Top</li>
-                </ul>
-
-                <div class="ticket-bottom-wrap">
-                  <div class="ticket-perforation"></div>
-                  <div class="ticket-barcode">
-                    <span class="barcode-stripes" aria-hidden="true"></span>
-                    <span>AP-GRP-08</span>
-                  </div>
-                  <button type="button" class="btn btn-primary btn-sm open-booking-btn" data-tier="group8" style="width: 100%;">
-                    BUY GROUP PASS &bull; ₹9,200
-                  </button>
-                </div>
-              </div>
-            </div>
-            <!-- Swipe indicator for mobile -->
+            <div class="tickets-track group-track" id="groupTrack"></div>
             <div class="track-swipe-hint" aria-hidden="true">
               <span>SWIPE TO COMPARE PLANS &rarr;</span>
             </div>
@@ -440,8 +176,13 @@
           <span>LOGIN</span>
         </div>
         <span class="step-indicator-sep">&rarr;</span>
-        <div class="step-indicator" id="indicatorCheckout">
+        <div class="step-indicator" id="indicatorAttendee">
           <span class="step-indicator-num">4</span>
+          <span>ATTENDEE</span>
+        </div>
+        <span class="step-indicator-sep">&rarr;</span>
+        <div class="step-indicator" id="indicatorCheckout">
+          <span class="step-indicator-num">5</span>
           <span>CHECKOUT</span>
         </div>
       </div>
@@ -450,58 +191,52 @@
       <div class="booking-step-panel active" id="stepPanelConfirm">
         <div class="selected-plan-banner">
           <div>
-            <div class="selected-plan-title" id="confirmPlanName">EARLY BIRD</div>
+            <div class="selected-plan-title" id="confirmPlanName">—</div>
             <div class="selected-plan-meta">
-              <span id="confirmPlanTypeLabel">SINGLE ENTRY</span> &bull; <span>6:00 PM – 12:00 AM</span> &bull; <span>STRICTLY 21+</span>
+              <span id="confirmPlanTypeLabel">SINGLE ENTRY</span> &bull; <span id="confirmPlanEventDate">—</span> &bull; <span>STRICTLY 21+</span>
             </div>
             <div style="margin-top: 0.45rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--red);">
-              <span>₹1,000 COVER CHARGE PAYABLE AT VENUE &bull; MASKS INCLUDED</span>
+              <span id="confirmPlanVenue">—</span> &bull; SURCHARGE MAY APPLY AT VENUE
             </div>
           </div>
           <div class="selected-plan-price-tag">
-            <span id="confirmPlanPrice">₹1,333</span>
+            <span id="confirmPlanPrice">₹0</span>
             <div class="sub" id="confirmPlanPerPerson">/ PERSON</div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="bookTierSelect" class="form-label">Selected Tier</label>
-          <select id="bookTierSelect" class="form-select">
-            <option value="early-bird" selected>EARLY BIRD — ₹1,333 / PERSON (FEATURED)</option>
-            <option value="super-early" disabled>SUPER EARLY BIRD — ₹1,111 / PERSON (SOLD OUT)</option>
-            <option value="stage1">STAGE 1 — ₹1,777 / PERSON</option>
-            <option value="group5">GROUP OF 5 — ₹6,000 TOTAL (₹1,200 / PERSON)</option>
-            <option value="group8">GROUP OF 8 — ₹9,200 TOTAL (₹1,150 / PERSON)</option>
-            <option value="stage2" disabled>STAGE 2 — COMING SOON / TBD</option>
-          </select>
+          <select id="bookTierSelect" class="form-select"></select>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Quantity (Packages / Passes)</label>
+          <label class="form-label">Quantity (Tickets)</label>
           <div class="quantity-control">
             <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">&minus;</button>
             <span class="qty-display" id="qtyDisplay">1</span>
             <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">&#43;</button>
           </div>
+          <div class="form-hint" id="qtyHint"></div>
         </div>
 
         <!-- Live Calculation Summary -->
         <div class="order-summary">
           <div class="summary-row">
             <span>Selected Pass</span>
-            <span id="sumTierName">EARLY BIRD</span>
+            <span id="sumTierName">—</span>
           </div>
           <div class="summary-row">
-            <span>Subtotal (<span id="sumQtyLabel">1</span> &times; <span id="sumPriceLabel">₹1,333</span>)</span>
-            <span id="sumSubtotal">₹1,333</span>
+            <span>Subtotal (<span id="sumQtyLabel">1</span> &times; <span id="sumPriceLabel">₹0</span>)</span>
+            <span id="sumSubtotal">₹0</span>
           </div>
           <div class="summary-row">
             <span>GST &amp; Entertainment Levy (18%)</span>
-            <span id="sumTax">₹240</span>
+            <span id="sumTax">₹0</span>
           </div>
           <div class="summary-row total">
             <span>Estimated Total</span>
-            <span class="total-price" id="sumTotal">₹1,573</span>
+            <span class="total-price" id="sumTotal">₹0</span>
           </div>
         </div>
 
@@ -520,7 +255,6 @@
         </div>
 
         <div class="mask-selection-grid" id="maskSelectionGrid">
-          <!-- Mask 1 -->
           <div class="mask-card" data-mask-id="obsidian-veil" tabindex="0" role="radio" aria-checked="false">
             <div class="mask-card-header">
               <span class="mask-badge-num">MASK 01</span>
@@ -536,7 +270,6 @@
             </div>
           </div>
 
-          <!-- Mask 2 (Default selected) -->
           <div class="mask-card selected" data-mask-id="crimson-phantom" tabindex="0" role="radio" aria-checked="true">
             <div class="mask-card-header">
               <span class="mask-badge-num">MASK 02</span>
@@ -552,7 +285,6 @@
             </div>
           </div>
 
-          <!-- Mask 3 -->
           <div class="mask-card" data-mask-id="noir-kinetic" tabindex="0" role="radio" aria-checked="false">
             <div class="mask-card-header">
               <span class="mask-badge-num">MASK 03</span>
@@ -568,7 +300,6 @@
             </div>
           </div>
 
-          <!-- Mask 4 -->
           <div class="mask-card" data-mask-id="cipher-visage" tabindex="0" role="radio" aria-checked="false">
             <div class="mask-card-header">
               <span class="mask-badge-num">MASK 04</span>
@@ -593,95 +324,157 @@
         </div>
       </div>
 
-      <!-- STEP 3: LOGIN / ATTENDEE CREDENTIALS -->
+      <!-- STEP 3: LOGIN / ACCOUNT -->
       <div class="booking-step-panel" id="stepPanelLogin">
         <div>
-          <div class="step-section-heading">ATTENDEE ACCESS &amp; LOGIN</div>
-          <p class="step-section-sub">Provide guest credentials for encrypted RFID allocation.</p>
+          <div class="step-section-heading">ACCOUNT ACCESS</div>
+          <p class="step-section-sub">Log in or create a free account to collect your tickets. Your passes are delivered to this account.</p>
         </div>
 
-        <div class="login-tabs">
-          <button type="button" class="login-tab-btn active" id="tabGuestAccess">GUEST CHECKOUT</button>
-          <button type="button" class="login-tab-btn" id="tabMemberLogin">MEMBER LOGIN</button>
+        <!-- Not authenticated -->
+        <div id="loginAuthView">
+          <div class="login-tabs">
+            <button type="button" class="login-tab-btn active" id="tabCreateAccount">CREATE ACCOUNT</button>
+            <button type="button" class="login-tab-btn" id="tabMemberLogin">MEMBER LOGIN</button>
+          </div>
+
+          <form id="signupForm" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="form-group">
+              <label for="authName" class="form-label">Full Name (Matching Govt ID)</label>
+              <input type="text" id="authName" class="form-input" placeholder="e.g. Aryan Malhotra" autocomplete="name" inputmode="text">
+            </div>
+            <div class="form-group">
+              <label for="authEmail" class="form-label">Email Address</label>
+              <input type="email" id="authEmail" class="form-input" placeholder="e.g. aryan@gmail.com" autocomplete="email" inputmode="email">
+            </div>
+            <div class="form-group">
+              <label for="authPhone" class="form-label">Phone Number (+91)</label>
+              <input type="tel" id="authPhone" class="form-input" placeholder="e.g. 9876543210" autocomplete="tel" inputmode="tel">
+            </div>
+            <div class="form-group">
+              <label for="authPassword" class="form-label">Create Password (min 6 characters)</label>
+              <input type="password" id="authPassword" class="form-input" placeholder="••••••••" autocomplete="new-password">
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-continue" id="btnDoSignup">CREATE ACCOUNT &rarr;</button>
+          </form>
+
+          <form id="loginForm" style="display: none; flex-direction: column; gap: 1rem;">
+            <div class="form-group">
+              <label for="loginEmail" class="form-label">Email Address</label>
+              <input type="email" id="loginEmail" class="form-input" placeholder="e.g. aryan@gmail.com" autocomplete="email" inputmode="email">
+            </div>
+            <div class="form-group">
+              <label for="loginPassword" class="form-label">Password</label>
+              <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-continue" id="btnDoLogin">MEMBER LOGIN &rarr;</button>
+          </form>
+
+          <div id="authError" style="display: none;" class="auth-form-error" role="alert"></div>
         </div>
 
-        <form id="attendeeLoginForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 1.2rem;">
-          <div class="form-group">
-            <label for="loginName" class="form-label">Full Name (Matching Govt ID)</label>
-            <input type="text" id="loginName" class="form-input" placeholder="e.g. Aryan Malhotra" required autocomplete="name" inputmode="text">
+        <!-- Authenticated state -->
+        <div id="loginConnectedView" style="display: none;">
+          <div class="connected-account">
+            <div class="connected-avatar" id="connectedAvatar">A</div>
+            <div>
+              <div class="connected-name" id="connectedName">—</div>
+              <div class="connected-email" id="connectedEmail">—</div>
+            </div>
           </div>
-
-          <div class="form-group">
-            <label for="loginEmail" class="form-label">Email Address (RFID Pass Delivery)</label>
-            <input type="email" id="loginEmail" class="form-input" placeholder="e.g. aryan@gmail.com" required autocomplete="email" inputmode="email">
-          </div>
-
-          <div class="form-group">
-            <label for="loginPhone" class="form-label">Phone Number (+91)</label>
-            <input type="tel" id="loginPhone" class="form-input" placeholder="e.g. 9876543210" required autocomplete="tel" inputmode="tel">
-          </div>
-        </form>
+          <p class="step-section-sub">You are signed in. Continue to add attendee details for each pass.</p>
+        </div>
 
         <div class="step-nav-row">
           <button type="button" class="btn btn-outline btn-sm btn-back" id="btnBackToMask">&larr; BACK</button>
+          <button type="button" class="btn btn-primary btn-lg btn-continue" id="btnGoToAttendee" style="display:none;">
+            CONTINUE TO ATTENDEES &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: ATTENDEES -->
+      <div class="booking-step-panel" id="stepPanelAttendee">
+        <div>
+          <div class="step-section-heading">ATTENDEE DETAILS</div>
+          <p class="step-section-sub" id="attendeeStepSub">Enter every guest admitted by your tickets.</p>
+        </div>
+        <div id="attendeeFormFields"></div>
+        <div id="attendeeError" style="display: none;" class="auth-form-error" role="alert"></div>
+        <div class="step-nav-row">
+          <button type="button" class="btn btn-outline btn-sm btn-back" id="btnBackToLogin">&larr; BACK</button>
           <button type="button" class="btn btn-primary btn-lg btn-continue" id="btnGoToCheckout">
             CONTINUE TO CHECKOUT &rarr;
           </button>
         </div>
       </div>
 
-      <!-- STEP 4: CHECKOUT & PAYMENT CONFIRMATION -->
+      <!-- STEP 5: CHECKOUT & PAYMENT CONFIRMATION -->
       <div class="booking-step-panel" id="stepPanelCheckout">
         <div>
           <div class="step-section-heading">FINAL ORDER CONFIRMATION</div>
-          <p class="step-section-sub">Review pass tier, mask allocation, and order total before booking.</p>
+          <p class="step-section-sub">Review pass tier, attendee count, mask allocation, and order total before confirming.</p>
         </div>
 
-        <!-- Dynamic Live Order Summary -->
         <div class="order-summary">
           <div class="summary-row">
             <span>Pass Tier</span>
-            <strong style="color: var(--white);" id="checkoutTierName">EARLY BIRD PASS</strong>
+            <strong style="color: var(--white);" id="checkoutTierName">—</strong>
           </div>
           <div class="summary-row">
             <span>Selected Mask</span>
             <strong style="color: var(--red);" id="checkoutMaskName">CRIMSON PHANTOM (INCLUDED)</strong>
           </div>
           <div class="summary-row">
-            <span>Pass Quantity</span>
+            <span>Ticket Quantity</span>
             <span id="checkoutQty">1 Pass</span>
           </div>
           <div class="summary-row">
+            <span>Attendees</span>
+            <span id="checkoutAttendeeCount">1 Person</span>
+          </div>
+          <div class="summary-row">
             <span>Venue &amp; Timing</span>
-            <span style="color: var(--white-muted);">ROAR &bull; 6:00 PM – 12:00 AM</span>
+            <span style="color: var(--white-muted);" id="checkoutVenue">—</span>
           </div>
           <div class="summary-row">
             <span>Subtotal</span>
-            <span id="checkoutSubtotal">₹1,333</span>
+            <span id="checkoutSubtotal">₹0</span>
           </div>
           <div class="summary-row">
             <span>GST &amp; Entertainment Levy (18%)</span>
-            <span id="checkoutTax">₹240</span>
+            <span id="checkoutTax">₹0</span>
           </div>
           <div class="summary-row total">
             <span>Total Payable</span>
-            <span class="total-price" id="checkoutTotal">₹1,573</span>
+            <span class="total-price" id="checkoutTotal">₹0</span>
           </div>
         </div>
 
-        <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gray); text-align: center; line-height: 1.5;">
-          <span>₹1,000 COVER CHARGE PAYABLE DIRECTLY AT VENUE DOOR &bull; STRICTLY 21+</span>
+        <div class="mock-pay-sim" id="mockPaySimWrap">
+          <label class="form-label" for="paySimulation">DEV — MOCK PAYMENT SIMULATION</label>
+          <select id="paySimulation" class="form-select">
+            <option value="success">SIMULATE SUCCESS</option>
+            <option value="failure">SIMULATE FAILURE</option>
+          </select>
+          <div class="form-hint">Mock provider — no real money. Enable for testing failed purchases &amp; inventory release.</div>
         </div>
 
+        <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gray); text-align: center; line-height: 1.5;">
+          <span>SURCHARGE, IF ANY, PAYABLE AT VENUE &bull; STRICTLY 21+</span>
+        </div>
+
+        <div id="bookingFormError" style="display:none;" class="auth-form-error" role="alert"></div>
+
         <div class="step-nav-row">
-          <button type="button" class="btn btn-outline btn-sm btn-back" id="btnBackToLogin">&larr; BACK</button>
+          <button type="button" class="btn btn-outline btn-sm btn-back" id="btnBackToAttendee">&larr; BACK</button>
           <button type="button" class="btn btn-primary btn-lg btn-continue" id="btnFinalConfirmPayment">
             CONFIRM &amp; ALLOCATE PASS
           </button>
         </div>
       </div>
 
-      <!-- STEP 5: SUCCESS CONFIRMATION VOUCHER -->
+      <!-- STEP 6 (final): SUCCESS CONFIRMATION VOUCHER -->
       <div class="booking-step-panel" id="stepPanelSuccess">
         <div class="success-icon-wrap" style="margin-inline: auto;">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -689,23 +482,22 @@
           </svg>
         </div>
         <div class="modal-title-wrap" style="text-align: center;">
-          <span class="modal-eyebrow accent">PASS ALLOCATED &bull; CONFIRMED</span>
+          <span class="modal-eyebrow accent">PAYMENT CAPTURED &bull; CONFIRMED</span>
           <h3 class="modal-title" style="font-size: 1.8rem; margin-top: 0.3rem;">YOU ARE ON THE LIST</h3>
         </div>
         <p style="font-size: 0.88rem; color: var(--white-muted); text-align: center; margin: 0 auto 0.5rem auto; line-height: 1.6; max-width: 440px;">
-          Your RFID access pass has been reserved under <strong id="confirmedHolderName" style="color: var(--white);"></strong>. A confirmation dispatch has been sent to your email.
+          Your passes are active under <strong id="confirmedHolderName" style="color: var(--white);"></strong>. Show these codes at the gate.
         </p>
 
-        <!-- Pass Voucher Card -->
         <div class="booking-voucher">
           <div class="voucher-top">
-            <div class="voucher-brand">APÉRO 2026</div>
-            <div class="voucher-ref" id="confirmedBookingRef">APÉRO-2026-XXXX</div>
+            <div class="voucher-brand">APÉRO ACCESS</div>
+            <div class="voucher-ref" id="confirmedBookingRef">—</div>
           </div>
           <div class="voucher-details">
             <div class="voucher-detail-item">
               <span class="v-label">TIER</span>
-              <span class="v-val" id="confirmedTier">EARLY BIRD PASS</span>
+              <span class="v-val" id="confirmedTier">—</span>
             </div>
             <div class="voucher-detail-item">
               <span class="v-label">MASK SELECTED</span>
@@ -713,29 +505,51 @@
             </div>
             <div class="voucher-detail-item">
               <span class="v-label">DATE &amp; TIME</span>
-              <span class="v-val">26 SEP 2026 &bull; 6:00 PM</span>
+              <span class="v-val" id="confirmedEventDate">—</span>
             </div>
             <div class="voucher-detail-item">
               <span class="v-label">VENUE</span>
-              <span class="v-val">ROAR, UDAIPUR</span>
+              <span class="v-val" id="confirmedVenue">—</span>
             </div>
           </div>
+
+          <div class="ticket-codes-block" id="ticketsResultList">
+            <div class="v-label">PASS CODES</div>
+          </div>
+
           <div class="ticket-perforation" style="position: static; margin-block: 1rem;"></div>
           <div class="voucher-barcode">
             <span class="barcode-stripes" style="width: 100%; height: 26px;"></span>
           </div>
         </div>
 
-        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
-          <button type="button" class="btn btn-outline btn-sm" id="btnFinishBooking" style="flex: 1;">
-            CLOSE TERMINAL
-          </button>
-          <a href="index.html" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
-            EXPLORE EXPERIENCE
-          </a>
+        <div style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm" id="btnFinishBooking" style="flex: 1;">CLOSE TERMINAL</button>
+          <button type="button" class="btn btn-outline btn-sm" id="btnViewMyTickets" style="flex: 1;">VIEW MY ACCESS</button>
         </div>
       </div>
 
+    </div>
+  </dialog>
+
+  <!-- MY ACCESS (customer orders + tickets) -->
+  <dialog id="myTicketsModal" aria-labelledby="myTicketsHeading">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-eyebrow">CUSTOMER ACCOUNT</span>
+          <h3 class="modal-title" id="myTicketsHeading">MY ACCESS</h3>
+        </div>
+        <button class="modal-close-btn" id="myTicketsCloseBtn" aria-label="Close My Access">&times;</button>
+      </div>
+
+      <div id="myTicketsBody">
+        <div id="myTicketsLoginPrompt" style="display:none;">
+          <p style="font-size:0.88rem; color: var(--white-muted); line-height:1.6; margin-bottom: 1rem;">You need to be signed in to view your orders and tickets.</p>
+          <button type="button" class="btn btn-primary btn-lg btn-continue" id="myTicketsSignInBtn">SIGN IN / CREATE ACCOUNT</button>
+        </div>
+        <div id="myTicketsContent" style="display:none;"></div>
+      </div>
     </div>
   </dialog>
 
@@ -779,12 +593,14 @@
 
       <div class="footer-bottom">
         <div>&copy; 2026 APÉRO NIGHTLIFE. ALL RIGHTS RESERVED.</div>
-        <div>UDAIPUR, INDIA &bull; 6:00 PM – 12:00 AM &bull; STRICTLY 21+</div>
+        <div>UDAIPUR, INDIA &bull; STRICTLY 21+</div>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/supabaseClient.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/booking.js"></script>
 </body>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!-- admin/refunds.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APÉRO Admin — Refunds</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="appNav"></div>
+  <div class="container">
+    <h1>Refunds</h1>
+    <p class="muted">Refunds are processed by the Backend Services via PaymentService (mock for now).</p>
+    <div id="bootError" class="alert error" style="display:none"><span id="bootErrorMsg"></span></div>
+    <div id="alert" class="alert error" style="display:none"></div>
+
+    <div class="card">
+      <h2>Request a refund</h2>
+      <div class="form-group">
+        <label for="fPayment">Payment (captured orders only)</label>
+        <select id="fPayment"><option value="">Loading payments…</option></select>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label for="fAmount">Amount (₹)</label>
+          <input id="fAmount" type="number" step="1" min="1">
+        </div>
+        <div class="form-group">
+          <label for="fReason">Reason</label>
+          <input id="fReason" type="text" placeholder="Customer requested cancel / duplicate / etc.">
+        </div>
+      </div>
+      <button class="btn-primary" id="refundBtn" type="button" style="width:auto; padding:12px 22px;">Process Refund</button>
+    </div>
+
+    <div class="card">
+      <h2>Refund history</h2>
+      <div class="toolbar">
+        <button class="btn-secondary" id="refreshBtn" type="button">Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Refund</th><th>Payment</th><th>Provider ref</th><th>Amount</th><th>Status</th><th>Requested by</th><th>Processed at</th></tr>
+          </thead>
+          <tbody id="refundsBody"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="src/supabaseClient.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const A = window.AperoAdmin;
+      A.renderNav('Refunds');
+      const alertBox = document.getElementById('alert');
+      const refundsBody = document.getElementById('refundsBody');
+      const fPayment = document.getElementById('fPayment');
+      const refundBtn = document.getElementById('refundBtn');
+      const params = new URLSearchParams(window.location.search);
+      const preselectOrder = params.get('order') || '';
+      const preselectPayment = params.get('payment') || '';
+
+      async function boot() {
+        const ctx = await A.ensureAdmin();
+        if (!ctx) return;
+        await loadPayments();
+        await loadRefunds();
+      }
+
+      async function loadPayments() {
+        try {
+          const { data, error } = await supabaseClient
+            .from('payments')
+            .select('id, order_id, amount, currency, status, created_at')
+            .in('status', ['captured', 'partially_refunded', 'refunded'])
+            .order('created_at', { ascending: false })
+            .limit(400);
+          if (error) throw error;
+          if (!data || !data.length) {
+            fPayment.innerHTML = '<option value="">No captured payments yet</option>';
+            return;
+          }
+          fPayment.innerHTML = data.map((p) => {
+            const short = String(p.order_id).slice(0, 8);
+            return '<option value="' + A.esc(p.id) + '" data-amount="' + p.amount + '">' +
+              'Order ' + short + ' • ' + A.inr(p.amount) + ' • ' + A.esc(p.status) + '</option>';
+          }).join('');
+
+          // Preselect from URL params.
+          let target = null;
+          if (preselectPayment) target = data.find((p) => p.id === preselectPayment);
+          if (!target && preselectOrder) target = data.find((p) => String(p.order_id) === preselectOrder);
+          if (target) {
+            fPayment.value = target.id;
+            document.getElementById('fAmount').value = target.amount;
+          } else {
+            document.getElementById('fAmount').value = (data.find((p) => p.status !== 'refunded') || data[0]) ? '' : '';
+          }
+          fPayment.addEventListener('change', () => {
+            const opt = fPayment.options[fPayment.selectedIndex];
+            const amount = opt ? opt.getAttribute('data-amount') : '';
+            if (amount) document.getElementById('fAmount').value = amount;
+          });
+        } catch (err) {
+          A.showAlert(alertBox, err.message || 'Failed to load payments');
+        }
+      }
+
+      async function loadRefunds() {
+        A.hideAlert(alertBox);
+        try {
+          const { data, error } = await supabaseClient
+            .from('refunds')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(300);
+          if (error) throw error;
+          if (!data || !data.length) {
+            refundsBody.innerHTML = '<tr><td colspan="7" class="empty">No refunds yet.</td></tr>';
+            return;
+          }
+          refundsBody.innerHTML = data.map((r) => (
+            '<tr>' +
+              '<td><code class="inline">' + A.esc(String(r.id).slice(0, 8)) + '…</code></td>' +
+              '<td><code class="inline">' + A.esc(String(r.payment_id || '').slice(0, 8)) + '…</code></td>' +
+              '<td>' + A.esc(r.provider_refund_id || '—') + '</td>' +
+              '<td>' + A.inr(r.amount) + '</td>' +
+              '<td>' + A.statusBadge(r.status) + '</td>' +
+              '<td class="truncate" title="' + A.esc(r.requested_by || '') + '">' + A.esc(r.requested_by || '—') + '</td>' +
+              '<td>' + A.esc(A.fmtDT(r.processed_at || r.created_at)) + '</td>' +
+            '</tr>'
+          )).join('');
+        } catch (err) {
+          A.showAlert(alertBox, err.message || 'Failed to load refunds');
+          refundsBody.innerHTML = '<tr><td colspan="7" class="empty">Failed to load.</td></tr>';
+        }
+      }
+
+      async function createRefund() {
+        A.hideAlert(alertBox);
+        const paymentId = fPayment.value;
+        const amount = Number(document.getElementById('fAmount').value);
+        const reason = document.getElementById('fReason').value.trim();
+        if (!paymentId) { A.showAlert(alertBox, 'Choose a payment to refund.'); return; }
+        if (!Number.isFinite(amount) || amount <= 0) { A.showAlert(alertBox, 'Enter a positive refund amount.'); return; }
+        refundBtn.disabled = true;
+        const original = refundBtn.textContent;
+        refundBtn.textContent = 'Processing…';
+        try {
+          const res = await A.apiFetch('/api/admin/refunds', {
+            method: 'POST',
+            body: { payment_id: paymentId, amount: amount, reason: reason }
+          });
+          A.showAlert(alertBox, 'Refund ' + String(res.refund && res.refund.id).slice(0, 8) + '… processed.');
+          alertBox.className = 'alert success';
+          await loadPayments();
+          await loadRefunds();
+        } catch (err) {
+          A.showAlert(alertBox, err.message || 'Refund failed');
+          alertBox.className = 'alert error';
+        } finally {
+          refundBtn.disabled = false;
+          refundBtn.textContent = original;
+        }
+      }
+
+      refundBtn.addEventListener('click', createRefund);
+      document.getElementById('refreshBtn').addEventListener('click', loadRefunds);
+      boot();
+    })();
+  </script>
+</body>
+</html>

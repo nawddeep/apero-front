@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- admin/payments.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APÉRO Admin — Payments</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="appNav"></div>
+  <div class="container">
+    <h1>Payments</h1>
+    <p class="muted">Provider-agnostic payment records. Refunds are requested from here.</p>
+    <div id="bootError" class="alert error" style="display:none"><span id="bootErrorMsg"></span></div>
+    <div id="alert" class="alert error" style="display:none"></div>
+    <div class="toolbar">
+      <select id="fStatus">
+        <option value="">All payment states</option>
+        <option value="created">Created</option>
+        <option value="captured">Captured</option>
+        <option value="failed">Failed</option>
+        <option value="refunded">Refunded</option>
+        <option value="partially_refunded">Partially refunded</option>
+      </select>
+      <button class="btn-secondary" id="refreshBtn" type="button">Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Payment</th><th>Order</th><th>Provider</th><th>Amount</th><th>Status</th><th>Paid at</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="paymentsBody"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="src/supabaseClient.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const A = window.AperoAdmin;
+      A.renderNav('Payments');
+      const alertBox = document.getElementById('alert');
+      const tb = document.getElementById('paymentsBody');
+      const fStatus = document.getElementById('fStatus');
+
+      async function boot() {
+        const ctx = await A.ensureAdmin();
+        if (!ctx) return;
+        await load();
+      }
+
+      async function load() {
+        A.hideAlert(alertBox);
+        try {
+          let qb = supabaseClient
+            .from('payments')
+            .select('id, order_id, provider, provider_payment_id, amount, currency, status, paid_at, created_at')
+            .order('created_at', { ascending: false })
+            .limit(500);
+          const st = fStatus.value;
+          if (st) qb = qb.eq('status', st);
+          const { data, error } = await qb;
+          if (error) throw error;
+
+          if (!data || !data.length) {
+            tb.innerHTML = '<tr><td colspan="7" class="empty">No payments found.</td></tr>';
+            return;
+          }
+          tb.innerHTML = data.map((p) => {
+            const refundable = p.status === 'captured' || p.status === 'partially_refunded';
+            return '<tr>' +
+              '<td><code class="inline">' + A.esc(String(p.id).slice(0, 8)) + '…</code><br><span class="muted">' + A.esc(p.provider_payment_id || '') + '</span></td>' +
+              '<td><code class="inline">' + A.esc(String(p.order_id).slice(0, 8)) + '…</code></td>' +
+              '<td>' + A.esc(p.provider).toUpperCase() + '</td>' +
+              '<td>' + A.inr(p.amount) + ' ' + A.esc(p.currency) + '</td>' +
+              '<td>' + A.statusBadge(p.status) + '</td>' +
+              '<td>' + A.esc(A.fmtDT(p.paid_at || p.created_at)) + '</td>' +
+              '<td>' + (refundable
+                ? '<a class="btn-mini" href="refunds.html?payment=' + encodeURIComponent(p.id) + '">Refund</a>'
+                : '<span class="muted">—</span>') + '</td>' +
+              '</tr>';
+          }).join('');
+        } catch (err) {
+          A.showAlert(alertBox, err.message || 'Failed to load payments');
+          tb.innerHTML = '<tr><td colspan="7" class="empty">Failed to load.</td></tr>';
+        }
+      }
+
+      fStatus.addEventListener('change', load);
+      document.getElementById('refreshBtn').addEventListener('click', load);
+      boot();
+    })();
+  </script>
+</body>
+</html>

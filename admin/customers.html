@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- admin/customers.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APÉRO Admin — Customers</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="appNav"></div>
+  <div class="container">
+    <h1>Customers</h1>
+    <p class="muted">Best-effort identity from order holders; grouped by account.</p>
+    <div id="bootError" class="alert error" style="display:none"><span id="bootErrorMsg"></span></div>
+    <div id="alert" class="alert error" style="display:none"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Account</th><th>Likely name</th><th>Orders</th><th>Spent (paid)</th><th>Last order</th></tr>
+        </thead>
+        <tbody id="customersBody"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="src/supabaseClient.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const A = window.AperoAdmin;
+      A.renderNav('Customers');
+      const alertBox = document.getElementById('alert');
+      const tb = document.getElementById('customersBody');
+
+      async function boot() {
+        const ctx = await A.ensureAdmin();
+        if (!ctx) return;
+        await load();
+      }
+
+      async function load() {
+        A.hideAlert(alertBox);
+        try {
+          const { data, error } = await supabaseClient
+            .from('orders')
+            .select('user_id, total_amount, status, created_at, order_items(ticket_holders(name, phone))')
+            .order('created_at', { ascending: true })
+            .limit(2000);
+          if (error) throw error;
+
+          const map = {};
+          for (const o of data || []) {
+            if (!o.user_id) continue;
+            if (!map[o.user_id]) map[o.user_id] = { userId: o.user_id, orders: 0, spent: 0, last: null, name: '', phone: '' };
+            const c = map[o.user_id];
+            c.orders += 1;
+            if (o.status === 'paid') c.spent += Number(o.total_amount || 0);
+            if (!c.last || new Date(o.created_at) > new Date(c.last)) c.last = o.created_at;
+            const holders = [];
+            for (const it of o.order_items || []) {
+              for (const h of it.ticket_holders || []) holders.push(h);
+            }
+            if (!c.name && holders.length && holders[0] && holders[0].name) {
+              c.name = holders[0].name;
+              c.phone = holders[0].phone || '';
+            }
+          }
+
+          const customers = Object.values(map).sort((a, b) => b.spent - a.spent);
+          if (!customers.length) {
+            tb.innerHTML = '<tr><td colspan="5" class="empty">No customers yet.</td></tr>';
+            return;
+          }
+          tb.innerHTML = customers.map((c) => (
+            '<tr>' +
+              '<td><code class="inline">' + A.esc(String(c.userId).slice(0, 10)) + '…</code></td>' +
+              '<td>' + A.esc(c.name || '—') + '<br><span class="muted">' + A.esc(c.phone || '') + '</span></td>' +
+              '<td>' + c.orders + '</td>' +
+              '<td>' + A.inr(c.spent) + '</td>' +
+              '<td>' + A.esc(A.fmtDT(c.last)) + '</td>' +
+            '</tr>'
+          )).join('');
+        } catch (err) {
+          A.showAlert(alertBox, err.message || 'Failed to load customers');
+          tb.innerHTML = '<tr><td colspan="5" class="empty">Failed to load.</td></tr>';
+        }
+      }
+
+      boot();
+    })();
+  </script>
+</body>
+</html>

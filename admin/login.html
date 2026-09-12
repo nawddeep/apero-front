@@ -11,9 +11,9 @@
   <div class="container">
     <div class="login-wrap">
       <div class="card">
-        <div class="brand">APERO <small>ADMIN PORTAL</small></div>
+        <div class="brand">APÉRO <small>ADMIN PORTAL</small></div>
         <h1>Login</h1>
-        <p class="muted">Use the admin email and password configured on the server.</p>
+        <p class="muted">Sign in with the Supabase account linked in the <code class="inline">admin_users</code> table. Only admin users are allowed in.</p>
         <div id="alert" class="alert error" style="display:none"></div>
         <form id="loginForm">
           <div class="form-group">
@@ -26,32 +26,58 @@
           </div>
           <button class="btn-primary" id="loginBtn" type="submit">Log in</button>
         </form>
+        <p class="muted" style="margin-top:1rem; font-size:0.78rem;">
+          No access? Insert your <code class="inline">auth.users</code> id into
+          <code class="inline">admin_users</code> first, then create a password using "Forgot password".
+        </p>
       </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="src/supabaseClient.js"></script>
   <script src="admin.js"></script>
   <script>
     (function () {
-      var form = document.getElementById('loginForm');
-      var alertBox = document.getElementById('alert');
-      var btn = document.getElementById('loginBtn');
+      const form = document.getElementById('loginForm');
+      const alertBox = document.getElementById('alert');
+      const btn = document.getElementById('loginBtn');
+      const emailInput = document.getElementById('email');
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('reason') === 'not-admin') {
+        AperoAdmin.showAlert(alertBox, 'This account is signed in but is not an admin user. Contact the admin to add you to admin_users.');
+      }
+
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         AperoAdmin.hideAlert(alertBox);
         btn.disabled = true;
         btn.textContent = 'Logging in...';
         try {
-          var email = document.getElementById('email').value.trim().toLowerCase();
-          var password = document.getElementById('password').value;
-          var data = await AperoAdmin.apiFetch('/api/admin/login', {
-            method: 'POST',
-            body: { email: email, password: password }
-          });
-          if (!data || !data.token) throw new Error('Login failed: no token returned');
-          AperoAdmin.setToken(data.token);
+          const email = emailInput.value.trim().toLowerCase();
+          const password = document.getElementById('password').value;
+          const res = await supabaseClient.auth.signInWithPassword({ email, password });
+          if (res.error) throw new Error(res.error.message);
+          if (!res.data || !res.data.session) throw new Error('Login failed: no session returned');
+
+          const { data: admin, error } = await supabaseClient
+            .from('admin_users')
+            .select('user_id, role')
+            .eq('user_id', res.data.session.user.id)
+            .maybeSingle();
+
+          if (error && !/relation "admin_users" does not exist/.test(String(error.message))) {
+            throw new Error('Failed to verify admin access: ' + error.message);
+          }
+          if (!admin) {
+            try { await supabaseClient.auth.signOut(); } catch (err) { /* ignore */ }
+            throw new Error('This account is not an admin user. Access denied.');
+          }
+
+          try { sessionStorage.setItem('apero_admin_access_token', res.data.session.access_token); } catch (err) { /* ignore */ }
           window.location.href = 'dashboard.html';
         } catch (err) {
-          AperoAdmin.showAlert(alertBox, 'error', err.message || 'Login failed');
+          AperoAdmin.showAlert(alertBox, err.message || 'Login failed');
         } finally {
           btn.disabled = false;
           btn.textContent = 'Log in';

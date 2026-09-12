@@ -122,3 +122,49 @@ tr:last-child td { border-bottom: 0; }
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 640px) { .row-2 { grid-template-columns: 1fr; } }
 code.inline { background: #f1f1f4; padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+
+/* Additional admin states */
+.badge.ok { background: #e7f6ef; border-color: #bfe6d2; color: var(--green); }
+.badge.failed { background: #fdeef0; border-color: #f3b7bb; color: #8d0a12; }
+.badge.refunded { background: #feefe4; border-color: #f4cfb4; color: #a05a24; }
+.badge.partial { background: #fdf3e3; border-color: #f0d9ac; color: var(--amber); }
+.badge.muted { background: #f1f1f4; border-color: #e0e0e5; color: var(--muted); }
+.stat.wide { grid-column: span 2; }
+.stat.wide .value { font-size: 22px; }
+.stat .hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.toolbar select { max-width: 260px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 820px) { .grid-2 { grid-template-columns: 1fr; } }
+.table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-danger {
+  background: #fff; color: var(--red); border: 1px solid #f3b7bb; border-radius: 8px;
+  padding: 8px 12px; font-size: 13px; cursor: pointer;
+}
+.btn-danger:hover { background: #fdeef0; }
+.btn-mini {
+  background: #fff; border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 10px; font-size: 13px; cursor: pointer;
+}
+.btn-mini:hover { border-color: var(--text); }
+.mt { margin-top: 14px; }
+.truncate { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.empty { padding: 22px; text-align: center; color: var(--muted); }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; font-size: 14px; }
+.detail-grid .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.detail-grid .v { font-weight: 600; word-break: break-word; }
+.detail-grid > div { padding: 8px 0; border-bottom: 1px dashed var(--border); }
+
+
+/* Check-in terminal */
+.checkin-strip { text-align: center; }
+.checkin-strip input {
+  max-width: 420px; margin: 0 auto; text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 20px; letter-spacing: 0.2em; text-transform: uppercase;
+}
+.checkin-card { margin: 16px auto 0; max-width: 640px; }
+.checkin-card .holder { font-size: 20px; font-weight: 800; }
+.checkin-card .meta { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.checkin-action { margin-top: 14px; display: flex; gap: 10px; }
+.checkin-success { border-left: 4px solid var(--green); }
+.checkin-fail { border-left: 4px solid var(--red); }

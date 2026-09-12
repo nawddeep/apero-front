@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- admin/orders.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APÉRO Admin — Orders</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="appNav"></div>
+  <div class="container">
+    <h1>Orders</h1>
+    <p class="muted">Every purchase across all events.</p>
+    <div id="bootError" class="alert error" style="display:none"><span id="bootErrorMsg"></span></div>
+    <div id="alert" class="alert error" style="display:none"></div>
+    <div class="toolbar">
+      <select id="fStatus">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="paid">Paid</option>
+        <option value="failed">Failed</option>
+        <option value="cancelled">Cancelled</option>
+        <option value="partially_refunded">Partially refunded</option>
+        <option value="refunded">Refunded</option>
+      </select>
+      <button class="btn-secondary" id="refreshBtn" type="button">Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Order</th><th>Event</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Created</th></tr>
+        </thead>
+        <tbody id="ordersBody"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="src/supabaseClient.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const A = window.AperoAdmin;
+      A.renderNav('Orders');
+      const alertBox = document.getElementById('alert');
+      const tb = document.getElementById('ordersBody');
+      const fStatus = document.getElementById('fStatus');
+
+      async function boot() {
+        const ctx = await A.ensureAdmin();
+        if (!ctx) return;
+        await load();
+      }
+
+      async function load() {
+        A.hideAlert(alertBox);
+        try {
+          let qb = supabaseClient
+            .from('orders')
+            .select('id, user_id, total_amount, currency, status, created_at, events(id, name), payments(id, provider, status), order_items(quantity, ticket_types(name))')
+            .order('created_at', { ascending: false })
+            .limit(500);
+          const st = fStatus.value;
+          if (st) qb = qb.eq('status', st);
+          const { data, error } = await qb;
+          if (error) throw error;
+
+          if (!data || !data.length) {
+            tb.innerHTML = '<tr><td colspan="7" class="empty">No orders found.</td></tr>';
+            return;
+          }
+          tb.innerHTML = data.map((o) => {
+            const items = (o.order_items || []).map((it) => (it.ticket_types ? A.esc(it.ticket_types.name) + ' ×' + it.quantity : '×' + it.quantity)).join('<br>');
+            const pay = (o.payments && o.payments.length ? o.payments[o.payments.length - 1] : null);
+            return '<tr>' +
+              '<td><a href="refunds.html?order=' + encodeURIComponent(o.id) + '" title="View refunds">' +
+                '<code class="inline">' + A.esc(String(o.id).slice(0, 8)) + '…</code></a></td>' +
+              '<td>' + A.esc((o.events && o.events.name) || '—') + '</td>' +
+              '<td>' + (items || '—') + '</td>' +
+              '<td>' + A.inr(o.total_amount) + '</td>' +
+              '<td>' + (pay ? A.esc(pay.provider).toUpperCase() + ' ' + A.statusBadge(pay.status) : A.statusBadge('—')) + '</td>' +
+              '<td>' + A.statusBadge(o.status) + '</td>' +
+              '<td>' + A.esc(A.fmtDT(o.created_at)) + '</td>' +
+              '</tr>';
+          }).join('');
+        } catch (err) {
+          A.showAlert(alertBox, err.message || 'Failed to load orders');
+          tb.innerHTML = '<tr><td colspan="7" class="empty">Failed to load.</td></tr>';
+        }
+      }
+
+      fStatus.addEventListener('change', load);
+      document.getElementById('refreshBtn').addEventListener('click', load);
+      boot();
+    })();
+  </script>
+</body>
+</html>
